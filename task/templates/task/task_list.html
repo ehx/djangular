@@ -1,0 +1,11 @@
+<h1>Tareas</h1>
+<ul>
+    {% for task in object_list %}
+    <li>{{ task.title }}
+    <a href="{% url 'task:task_edit' task.id %}">editar</a>
+    <a href="{% url 'task:task_delete' task.id %}">borrar</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'task:task_new' %}">Nueva</a>
