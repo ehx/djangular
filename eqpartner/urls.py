@@ -26,7 +26,6 @@ class TaskViewSet(viewsets.ModelViewSet):
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        #fields = ('id', 'sar', 'title', 'description', 'creation_date', 'done')
 
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()

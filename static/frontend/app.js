@@ -17,6 +17,7 @@ app.factory('taskResource', function ($resource) {
     {
       'get':    {method:'GET'},
       'save':   {method:'POST'},
+      'update': {method:'PUT'},
       'query':  {method:'GET', isArray:true},
       'remove': {method:'DELETE'},
       'delete': {method:'DELETE'} 
@@ -25,33 +26,22 @@ app.factory('taskResource', function ($resource) {
 
 app.controller('appController', function ($scope, $http, taskResource) {
   function getTasks() {
-    $scope.tasks = taskResource.query({done:0});
-    $scope.ctasks = taskResource.query({done:1});
+    $scope.tasks = taskResource.query({done: false});
+    $scope.ctasks = taskResource.query({done: true});
   }
   
   getTasks();
 
-  $scope.updateTask = function(taskId) {
-
-    task = taskResource.query({ id:taskId }).$q.then(function(response){
-
-      
-      task = response;
-      task.done = 1
-      task.$save();
+  $scope.doneTask = function(taskId) {
+    taskResource.get({ taskId:taskId }, function(task) {
+      task.done = true;
+      taskResource.update({ taskId:task.id }, task);
     });
+    getTasks();
   };
 
-
-  function(data) {
-    var result = [];
-    angular.forEach(data, function(e) {
-      result.push(e);
-    }
-  });
-
   $scope.deleteTask = function(taskId) {
-    taskResource.delete({ id: taskId });
+    taskResource.delete({ taskId : taskId });
     getTasks();
   };
 })

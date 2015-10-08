@@ -27,7 +27,7 @@ class Task(models.Model):
     estimation_hours = models.IntegerField(verbose_name='Horas Estimada')
     description = models.CharField(max_length=255, verbose_name='Descripcion')
     sar = models.IntegerField(default=0, verbose_name='Incidente')
-    done = models.IntegerField(default=0, verbose_name='Completado')
+    done = models.BooleanField(default=0, verbose_name='Completado')
 
     def __unicode__(self):
         return self.title
