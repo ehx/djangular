@@ -25,7 +25,7 @@
               <li ng-repeat="tdTask in tasks" class="ui-state-default">
                 <div class="checkbox">
                   <label>
-                    <input ng-click="updateTask(tdTask.id)"type="checkbox" value="" />{{tdTask.title}} - {{tdTask.description}} 
+                    <input ng-click="updateTask(tdTask.id)"type="checkbox" value="" />{{tdTask.title}}
                   </label>
                 </div>
               </li>
@@ -37,7 +37,7 @@
              <h2>Realizadas</h2>
                 <ul id="done-items" class="list-unstyled">
                   <li ng-repeat="cTask in ctasks">
-                    {{cTask.title}} - {{cTask.description}} 
+                    {{cTask.title}}
                     <button class="remove-item btn btn-default btn-xs pull-right" ng-click="deleteTask(cTask.id)" >
                     <span class="glyphicon glyphicon-remove"></span></button>
                   </li>

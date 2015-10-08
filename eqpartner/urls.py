@@ -6,12 +6,15 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from task.models import Task
+from task.models import Task, Client
 
-class TaskSerializer(serializers.HyperlinkedModelSerializer):
+from django.forms import ModelForm
+
+class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('id', 'title', 'description', 'creation_date', 'done')
+        #exclude = ['done']
+        fields = ('id', 'sar', 'title', 'description', 'creation_date', 'done', 'start_date', 'finish_date', 'clientId', 'userId', 'priority' ,'urgency', 'estimation_hours')
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -19,8 +22,20 @@ class TaskViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('title', 'done')
 
+
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+        #fields = ('id', 'sar', 'title', 'description', 'creation_date', 'done')
+
+class ClientViewSet(viewsets.ModelViewSet):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+
 router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)
+router.register(r'client', ClientViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
