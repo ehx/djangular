@@ -24,7 +24,28 @@ app.factory('taskResource', function ($resource) {
     });
 });
 
-app.controller('appController', function ($scope, $http, taskResource) {
+app.factory('clientResource', function ($resource) {
+  return $resource('/client/:clientId', {clientId:'@id'},
+    {
+      'get':    {method:'GET'},
+      'save':   {method:'POST'},
+      'update': {method:'PUT'},
+      'query':  {method:'GET', isArray:true},
+      'remove': {method:'DELETE'},
+      'delete': {method:'DELETE'} 
+    });
+});
+
+app.controller('appController', function ($scope, $http, taskResource, clientResource) {
+
+  $scope.getClient = function() {
+    $scope.clients = clientResource.query();
+  }
+
+  $scope.saveEntry = function() {
+    taskResource.save($scope.task);
+  }
+
   function getTasks() {
     $scope.tasks = taskResource.query({done: false});
     $scope.ctasks = taskResource.query({done: true});
