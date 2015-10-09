@@ -28,21 +28,6 @@ section,
 summary {
     display: block
 }
-audio,
-canvas,
-progress,
-video {
-    display: inline-block;
-    vertical-align: baseline
-}
-audio:not([controls]) {
-    display: none;
-    height: 0
-}
-[hidden],
-template {
-    display: none
-}
 a {
     background-color: transparent
 }
@@ -4284,6 +4269,10 @@ select[multiple].input-group-sm>.input-group-btn>.btn {
     }
 }
 .navbar-collapse {
+    display: block!important;
+    height: auto!important;
+    padding-bottom: 0;
+    overflow: visible!important;
     padding-right: 15px;
     padding-left: 15px;
     overflow-x: visible;
@@ -8846,7 +8835,7 @@ body {
     position: relative;
     width: 100%;
     height: auto;
-    min-height: 100%
+    min-height: 92%
 }
 .app:before {
     position: absolute;
@@ -9046,11 +9035,6 @@ body {
 @media(min-width:768px) {
     .app-aside, .navbar-header {
         width: 200px
-    }
-    .navbar-collapse,
-    .app-content,
-    .app-footer {
-        margin-left: 200px
     }
     .app-aside-right {
         position: absolute;

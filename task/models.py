@@ -4,12 +4,20 @@ from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from django.utils import timezone
 
+class Organization(models.Model):
+    name = models.CharField(max_length=50, verbose_name="Nombre")
+    address = models.CharField(max_length=50, verbose_name="Direccion")
+
+    def __unicode__(self):
+        return self.name
+
 class Client(models.Model):
     name = models.CharField(max_length=50, verbose_name='Nombre')
     lastname = models.CharField(max_length=50, verbose_name='Apellido')
     address = models.CharField(max_length=50, verbose_name='Direccion')
     telephone = models.IntegerField(verbose_name='Telefono')
     mail = models.EmailField(max_length=254, verbose_name='Mail')
+    organizationId = models.ForeignKey(Organization, verbose_name="Organizacion")
 
     def __unicode__(self):
         return self.name + ' ' + self.lastname
