@@ -1,5 +1,5 @@
 //para hacer uso de $resource debemos colocarlo al crear el modulo
-var app = angular.module('app', ["ngResource", 'ngCookies', 'ui.bootstrap']);
+var app = angular.module('app', ["ngResource", 'ngCookies', 'ngRoute']);
 
 app.config(function ($httpProvider, $resourceProvider) {
   $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -11,6 +11,44 @@ app.config(function ($httpProvider, $resourceProvider) {
 app.run(['$http', '$cookies', function($http, $cookies) {
   $http.defaults.headers.common['X-CSRFToken'] = $cookies['csrftoken'];
 }]);
+
+
+// rutas
+app.config(function($routeProvider) {
+  $routeProvider
+    // home
+    .when('/', {
+      templateUrl : 'task.html',
+      controller  : 'taskController'
+    })
+
+    // history
+    .when('/history', {
+      templateUrl : 'history.html',
+      controller  : 'commentsController'
+    })
+
+    .otherwise({
+      redirectTo: '/'
+    });
+});
+
+
+app.directive('jqdatepicker', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+         link: function (scope, element, attrs, ngModelCtrl) {
+            element.datepicker({
+                dateFormat: 'yy-mm-dd',
+                onSelect: function (date) {
+                    scope.date = date;
+                    scope.$apply();
+                }
+            });
+        }
+    };
+});
 
 //de esta forma tan sencilla consumimos con $resource en AngularJS
 app.factory('taskResource', function ($resource) {
@@ -25,6 +63,10 @@ app.factory('taskResource', function ($resource) {
     });
 });
 
+app.factory('taskCommentsResource', function ($resource) {
+  return $resource('/taskComments/')
+});
+
 app.factory('clientResource', function ($resource) {
   return $resource('/client/:clientId', {clientId:'@id'},
     {
@@ -37,7 +79,7 @@ app.factory('clientResource', function ($resource) {
     });
 });
 
-app.controller('appController', function ($scope, $http, taskResource) {
+app.controller('taskController', function ($scope, taskResource) {
 
   function getTasks() {
     $scope.tasks = taskResource.query({done: false});
@@ -67,9 +109,23 @@ app.controller('modalController', function ($scope, taskResource, clientResource
   });
 
   $scope.saveEntry = function() {
-    $scope.task.start_date = "2015-12-12";
     $scope.task.userId = 1;
     taskResource.save($scope.task);
   };
 
 })
+
+app.controller('commentsController', function ($scope, taskCommentsResource) {
+
+  taskCommentsResource.query({}, function(data){
+    $scope.allComments = data;
+  });
+})
+
+app.controller('mainController', function ($scope, taskCommentsResource) {
+
+  taskCommentsResource.query({}, function(data){
+    $scope.allComments = data;
+  });
+})
+

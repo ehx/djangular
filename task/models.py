@@ -23,8 +23,8 @@ class Client(models.Model):
         return self.name + ' ' + self.lastname
 
 class Task(models.Model):
-    userId = models.ForeignKey(User, verbose_name='Usuario')
-    clientId = models.ForeignKey(Client, verbose_name='Cliente')
+    user = models.ForeignKey(User, verbose_name='Usuario')
+    client = models.ForeignKey(Client, verbose_name='Cliente')
     title = models.CharField(max_length=50, verbose_name='Titulo de la tarea')
     creation_date = models.DateField(null=True, blank=True,auto_now_add=True)
     turnover_code = models.CharField(max_length=50, verbose_name='Codigo en Turnover')
@@ -43,6 +43,12 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('task:task_edit', kwargs={'pk': self.pk})
 
+class TaskComments(models.Model):
+    task = models.ForeignKey(Task, verbose_name="Tarea")
+    user = models.ForeignKey(User, verbose_name="Usuario")
+    comment = models.CharField(max_length= 500, verbose_name="Comentario")
+    creation_date = models.DateTimeField(auto_now_add=True)
+
 class TaskUser(models.Model):
-    taskId = models.ForeignKey(Task)
-    userId = models.ForeignKey(User)
+    task = models.ForeignKey(Task)
+    user = models.ForeignKey(User)

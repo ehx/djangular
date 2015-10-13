@@ -1,0 +1,96 @@
+
+<div class="bg-light lter b-b wrapper-md">
+  <div class="row">
+    <div class="col-sm-6 col-xs-12">
+      <h1 class="m-n font-thin h3 text-black">Inicio</h1>
+      <small class="text-muted">Lista de tareas</small>
+    </div>
+  </div>
+</div>
+<!-- sub header -->
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog" ng-controller="modalController">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Nueva tarea</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="usr">Titulo :</label>
+          <input type='text' class="form-control" ng-model="task.title">
+        </div>
+        <div class="form-group">
+          <label for="clientSelect">Cliente :</label>
+          <select name="singleSelect" id="clientSelect" ng-model="task.clientId">
+            <option ng-repeat="option in clients" value="{{option.id}}">{{option.name}} {{option.lastname}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="usr">Codigo de turnover :</label>
+          <input type='text' class="form-control" ng-model="task.turnover_code">
+        </div>
+        <div class="form-group">
+          <label for="usr">Prioridad :</label>
+          <input type='text' class="form-control" ng-model="task.priority">
+        </div>
+        <div class="form-group">
+          <label for="usr">Urgencia :</label>
+          <input type='text' class="form-control" ng-model="task.urgency">
+        </div>
+        <div class="form-group">
+          <label for="usr">Fecha de comienzo :</label>
+          <input type='text' class="form-control" ng-model="task.start_date" jqdatepicker>
+        </div>
+        <div class="form-group">
+          <label for="usr">Fecha de finalizacion :</label>
+          <input type="text" class="form-control" ng-model="task.finish_date" jqdatepicker />
+        </div>
+        <div class="form-group">
+          <label for="usr">Horas estimadas:</label>
+          <input type='text' class="form-control" ng-model="task.estimation_hours">
+        </div>
+        <div class="form-group">
+          <label for="usr">Descripcion :</label>
+          <input type='text' class="form-control" ng-model="task.description">
+        </div>
+        <div class="form-group">
+          <label for="usr">Sar :</label>
+          <input type='text' class="form-control" ng-model="task.sar">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="saveEntry()">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrapper-md " ng-controller="taskController">
+  <!-- tasks -->
+  <div class="panel wrapper">
+    <div class="row">
+      <div class="col-md-12 b-r b-light no-border-xs">
+        <a href="" class="text-muted pull-right text-lg"></a>
+        <h4 class="font-thin m-t-none m-b-md text-muted">Tareas</h4>
+        <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">+</button> -->
+        <div class=" m-b">
+          <div class="m-b" ng-repeat="tdTask in tasks">
+            <span class="label text-base bg-info pos-rlt m-r">
+              <i class="arrow right arrow-info"></i>
+              {{tdTask.finish_date}}
+            </span>
+            <a href="">{{tdTask.title}}</a>
+            <span class="pull-right label text-base-12 bg-primary-white pos-rlt m-r">Prioridad: {{ tdTask.priority }}</span>
+            <span class="pull-right label text-base-12 bg-success-white pos-rlt m-r">Horas estimadas: {{ tdTask.estimation_hours }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / tasks -->
+</div>
