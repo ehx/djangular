@@ -23,8 +23,8 @@ app.config(function($routeProvider) {
     })
 
     // history
-    .when('/history', {
-      templateUrl : 'history.html',
+    .when('/task/:taskId', {
+      templateUrl : 'detailTask.html',
       controller  : 'commentsController'
     })
 
@@ -64,7 +64,15 @@ app.factory('taskResource', function ($resource) {
 });
 
 app.factory('taskCommentsResource', function ($resource) {
-  return $resource('/taskComments/')
+  return $resource('/taskComments/?task', {task:'@id'},
+    {
+      'get':    {method:'GET'},
+      'save':   {method:'POST'},
+      'update': {method:'PUT'},
+      'query':  {method:'GET', isArray:true},
+      'remove': {method:'DELETE'},
+      'delete': {method:'DELETE'} 
+    });
 });
 
 app.factory('clientResource', function ($resource) {
@@ -115,17 +123,22 @@ app.controller('modalController', function ($scope, taskResource, clientResource
 
 })
 
-app.controller('commentsController', function ($scope, taskCommentsResource) {
+app.controller('commentsController', function ($scope, taskCommentsResource, $routeParams, taskResource) {
 
-  taskCommentsResource.query({}, function(data){
-    $scope.allComments = data;
+  var taskId = $routeParams.taskId
+
+  taskResource.query({ id : taskId }, function(task){
+    $scope.task = task[0];    
+  });
+  
+  taskCommentsResource.query({ task : taskId }, function(data){
+    $scope.allComments = data;    
   });
 })
 
 app.controller('mainController', function ($scope, taskCommentsResource) {
 
-  taskCommentsResource.query({}, function(data){
-    $scope.allComments = data;
-  });
+  //taskCommentsResource.query({task: 2}, function(data){
+  //  $scope.allComments = data;
+  //});
 })
-

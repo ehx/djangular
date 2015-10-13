@@ -18,6 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ('is_staff', 'is_superuser', 'is_active', 'date_joined',)
 
 class TaskSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Task
         fields = ('id', 'sar', 'title', 'description', 'creation_date', 'done', 'start_date', 'finish_date', 'client', 'user', 'priority' ,'urgency', 'estimation_hours')
@@ -32,10 +33,11 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
 class TaskCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    task = TaskSerializer()
 
     class Meta:
         model = TaskComments
-        fields = ('id', 'task', 'comment', 'creation_date', 'user')
+        fields = ('id', 'task', 'user', 'comment', 'creation_date')
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -46,7 +48,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('title', 'done')
+    filter_fields = ('id', 'title', 'done')
 
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
@@ -62,6 +64,7 @@ class TaskCommentViewSet(viewsets.ModelViewSet):
     queryset = TaskComments.objects.all()
     serializer_class = TaskCommentSerializer
     filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('task', 'user')
 
 router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)

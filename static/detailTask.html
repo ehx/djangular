@@ -1,0 +1,50 @@
+<!-- sub header -->
+<div class="bg-light lter b-b wrapper-md">
+  <div class="row">
+    <div class="col-sm-6 col-xs-12">
+      <h1 class="m-n font-thin h3 text-black">Detalle de tarea</h1>
+      <small class="text-muted">{{task.title}}</small>
+    </div>
+  </div>
+</div>
+<!-- sub header -->
+
+<div class="wrapper-md">
+  <!-- history -->
+  <div class="panel wrapper">
+    <div class="row">
+      <div class="well m-t bg-info dker lt">
+        <div class="row">
+          <div class="col-xs-12">
+            <strong>{{task.title}}</strong>
+            <p>
+              Descripcion : {{task.description}}<br>
+              Fecha de inicio : {{task.start_date}}<br>
+              Fecha de finalizacion : {{task.finish_date}}<br>
+              Horas estimadas : {{task.estimation_hours}}<br>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-b text-md">Comentarios</div>
+      <div class="streamline b-l m-b">
+        <div ng-if="allComments.length > 0" ng-repeat="comment in allComments" class="sl-item b-success b-l">
+          <div class="m-l">
+            <div class="text-muted">{{comment.creation_date | date:'dd/MM/yy HH:mm:ss'}} - 
+              {{comment.user.first_name}} {{comment.user.last_name}}</div>
+            <p>{{comment.comment}}</p>
+          </div>
+        </div>
+
+        <div ng-if="allComments.length === 0"class="sl-item b-danger b-l">
+          <div class="m-l">
+            <p>No se encontraron comentarios para esta tarea.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- / history -->

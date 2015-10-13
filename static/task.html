@@ -69,7 +69,7 @@
   </div>
 </div>
 
-<div class="wrapper-md " ng-controller="taskController">
+<div class="wrapper-md">
   <!-- tasks -->
   <div class="panel wrapper">
     <div class="row">
@@ -83,7 +83,7 @@
               <i class="arrow right arrow-info"></i>
               {{tdTask.finish_date}}
             </span>
-            <a href="">{{tdTask.title}}</a>
+            <a href="#/task/{{tdTask.id}}">{{tdTask.title}}</a>
             <span class="pull-right label text-base-12 bg-primary-white pos-rlt m-r">Prioridad: {{ tdTask.priority }}</span>
             <span class="pull-right label text-base-12 bg-success-white pos-rlt m-r">Horas estimadas: {{ tdTask.estimation_hours }}
             </span>
