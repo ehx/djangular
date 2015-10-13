@@ -3,7 +3,7 @@
 - pip install virtualenv
 - mkvirtualenv venv
 - cd venv
-- pip install requirements.txt
 - workon venv
+- pip install -r requirements.txt
 - ./manage.py migrate
 - ./manage.py runserver
