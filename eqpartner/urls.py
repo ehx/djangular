@@ -53,6 +53,11 @@ class TaskCommentSerializer(serializers.ModelSerializer):
         model = TaskComment
         fields = ('id', 'task', 'user', 'comment', 'creation_date')
 
+class TaskCommentSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = TaskComment
+        fields = ('id', 'task', 'user', 'comment', 'creation_date')
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -82,6 +87,12 @@ class OrganizationViewSet(viewsets.ModelViewSet):
 
 class TaskCommentViewSet(viewsets.ModelViewSet):
     queryset = TaskComment.objects.all()
+    serializer_class = TaskCommentSerializer2
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('task', 'user')
+
+class TaskCommentViewSet2(viewsets.ModelViewSet):
+    queryset = TaskComment.objects.all()
     serializer_class = TaskCommentSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('task', 'user')
@@ -91,6 +102,7 @@ router.register(r'task', TaskViewSet)
 router.register(r'client', ClientViewSet)
 router.register(r'organization', OrganizationViewSet)
 router.register(r'taskComment', TaskCommentViewSet)
+router.register(r'taskComment2', TaskCommentViewSet2)
 router.register(r'user', UserViewSet)
 router.register(r'notification', NotificationViewSet)
 

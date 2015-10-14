@@ -87,6 +87,18 @@ app.factory('taskCommentsResource', function ($resource) {
     });
 });
 
+app.factory('taskCommentsResource2', function ($resource) {
+  return $resource('/taskComment2/:id', {id:'@id'},
+    {
+      'get':    {method:'GET'},
+      'save':   {method:'POST'},
+      'update': {method:'PUT'},
+      'query':  {method:'GET', isArray:true},
+      'remove': {method:'DELETE'},
+      'delete': {method:'DELETE'} 
+    });
+});
+
 app.factory('clientResource', function ($resource) {
   return $resource('/client/:id', {id:'@id'},
     {
@@ -135,25 +147,34 @@ app.controller('modalController', function ($scope, taskResource, clientResource
 
 })
 
-app.controller('commentsController', function ($scope, taskCommentsResource, $routeParams, taskResource, notificationResource) {
+app.controller('commentsController', function ($scope, taskCommentsResource, $routeParams, taskResource, 
+  notificationResource, taskCommentsResource2, $timeout) {
 
   var taskId = parseInt($routeParams.taskId, 10);
 
-  var task = taskResource.query({ task : taskId }, function(task){
+  function getComments() {
+    $scope.tasks = taskResource.query({done: false});
+    $scope.ctasks = taskResource.query({done: true});
+  }
+
+
+  function getComments(){
+    taskCommentsResource.query({ task : taskId }, function(data){
+      $scope.allComments = data;    
+    })
+  };
+
+  getComments();
+
+  taskResource.query({ task : taskId }, function(task){
     $scope.task = task[0];    
   });
   
-  taskCommentsResource.query({ task : taskId }, function(data){
-    $scope.allComments = data;    
-  });
-
   $scope.newComment = function () {
-    var cm = {
-      task : task[0],
-      user : 1,
-      comment : $scope.cm.comment
-    }
-       
+    var cm = new taskCommentsResource2;
+    cm.task = taskId;
+    cm.user = 1;
+    cm.comment = $scope.cm.comment;
     taskCommentsResource.save(cm);
 
     //create notification to user
@@ -162,6 +183,8 @@ app.controller('commentsController', function ($scope, taskCommentsResource, $ro
     nt.ntype = "comment";
     nt.notificationId = taskId;
     notificationResource.save(nt);
+    $timeout(getComments, 500);
+    
   }
 
 })
