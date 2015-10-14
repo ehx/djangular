@@ -52,7 +52,19 @@ app.directive('jqdatepicker', function () {
 
 //de esta forma tan sencilla consumimos con $resource en AngularJS
 app.factory('taskResource', function ($resource) {
-  return $resource('/task/:taskId', {taskId:'@id'},
+  return $resource('/task/:id', {id:'@id'},
+    {
+      'get':    {method:'GET'},
+      'save':   {method:'POST'},
+      'update': {method:'PUT'},
+      'query':  {method:'GET', isArray:true},
+      'remove': {method:'DELETE'},
+      'delete': {method:'DELETE'} 
+    });
+});
+
+app.factory('notificationResource', function ($resource) {
+  return $resource('/notification/:id', {id:'@id'},
     {
       'get':    {method:'GET'},
       'save':   {method:'POST'},
@@ -64,7 +76,7 @@ app.factory('taskResource', function ($resource) {
 });
 
 app.factory('taskCommentsResource', function ($resource) {
-  return $resource('/taskComments/?task', {task:'@id'},
+  return $resource('/taskComment/:id', {id:'@id'},
     {
       'get':    {method:'GET'},
       'save':   {method:'POST'},
@@ -76,7 +88,7 @@ app.factory('taskCommentsResource', function ($resource) {
 });
 
 app.factory('clientResource', function ($resource) {
-  return $resource('/client/:clientId', {clientId:'@id'},
+  return $resource('/client/:id', {id:'@id'},
     {
       'get':    {method:'GET'},
       'save':   {method:'POST'},
@@ -123,20 +135,42 @@ app.controller('modalController', function ($scope, taskResource, clientResource
 
 })
 
-app.controller('commentsController', function ($scope, taskCommentsResource, $routeParams, taskResource) {
+app.controller('commentsController', function ($scope, taskCommentsResource, $routeParams, taskResource, notificationResource) {
 
-  var taskId = $routeParams.taskId
+  var taskId = parseInt($routeParams.taskId, 10);
 
-  taskResource.query({ id : taskId }, function(task){
+  var task = taskResource.query({ task : taskId }, function(task){
     $scope.task = task[0];    
   });
   
   taskCommentsResource.query({ task : taskId }, function(data){
     $scope.allComments = data;    
   });
+
+  $scope.newComment = function () {
+    var cm = {
+      task : task[0],
+      user : 1,
+      comment : $scope.cm.comment
+    }
+       
+    taskCommentsResource.save(cm);
+
+    //create notification to user
+    var nt = new notificationResource;
+    nt.user = 1;
+    nt.ntype = "comment";
+    nt.notificationId = taskId;
+    notificationResource.save(nt);
+  }
+
 })
 
-app.controller('mainController', function ($scope, taskCommentsResource) {
+app.controller('mainController', function ($scope, notificationResource) {
+
+  notificationResource.get({}, function(data){
+    $scope.countNotification = data.count;
+  });
 
   //taskCommentsResource.query({task: 2}, function(data){
   //  $scope.allComments = data;

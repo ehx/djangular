@@ -24,6 +24,23 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Notification',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('ntype', models.CharField(max_length=50, verbose_name=b'Tipo de notificacion')),
+                ('notificationId', models.IntegerField(verbose_name=b'Id Notification')),
+                ('user', models.ForeignKey(verbose_name=b'Usuario', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Organization',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('name', models.CharField(max_length=50, verbose_name=b'Nombre')),
+                ('address', models.CharField(max_length=50, verbose_name=b'Direccion')),
+            ],
+        ),
+        migrations.CreateModel(
             name='Task',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -38,16 +55,31 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(max_length=255, verbose_name=b'Descripcion')),
                 ('sar', models.IntegerField(default=0, verbose_name=b'Incidente')),
                 ('done', models.BooleanField(default=0, verbose_name=b'Completado')),
-                ('clientId', models.ForeignKey(verbose_name=b'Cliente', to='task.Client')),
-                ('userId', models.ForeignKey(verbose_name=b'Usuario', to=settings.AUTH_USER_MODEL)),
+                ('client', models.ForeignKey(verbose_name=b'Cliente', to='task.Client')),
+                ('user', models.ForeignKey(verbose_name=b'Usuario', to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='TaskComment',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('comment', models.CharField(max_length=500, verbose_name=b'Comentario')),
+                ('creation_date', models.DateTimeField(auto_now_add=True)),
+                ('task', models.ForeignKey(verbose_name=b'Tarea', to='task.Task')),
+                ('user', models.ForeignKey(verbose_name=b'Usuario', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='TaskUser',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('taskId', models.ForeignKey(to='task.Task')),
-                ('userId', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('task', models.ForeignKey(to='task.Task')),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
+        ),
+        migrations.AddField(
+            model_name='client',
+            name='organizationId',
+            field=models.ForeignKey(verbose_name=b'Organizacion', to='task.Organization'),
         ),
     ]

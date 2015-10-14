@@ -4,6 +4,14 @@ from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from django.utils import timezone
 
+class Notification(models.Model):
+    user = models.ForeignKey(User, verbose_name='Usuario')
+    ntype = models.CharField(max_length=50, verbose_name="Tipo de notificacion")
+    notificationId = models.IntegerField(verbose_name="Id Notification")
+
+    def __unicode__(self):
+        return self.id + ' ' + self.user
+
 class Organization(models.Model):
     name = models.CharField(max_length=50, verbose_name="Nombre")
     address = models.CharField(max_length=50, verbose_name="Direccion")
@@ -43,7 +51,7 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('task:task_edit', kwargs={'pk': self.pk})
 
-class TaskComments(models.Model):
+class TaskComment(models.Model):
     task = models.ForeignKey(Task, verbose_name="Tarea")
     user = models.ForeignKey(User, verbose_name="Usuario")
     comment = models.CharField(max_length= 500, verbose_name="Comentario")
