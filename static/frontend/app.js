@@ -1,5 +1,5 @@
 //para hacer uso de $resource debemos colocarlo al crear el modulo
-var app = angular.module('app', ["ngResource", 'ngCookies', 'ngRoute', 'ui.bootstrap']);
+var app = angular.module('app', ["ngResource", 'ngCookies', 'ngRoute', 'ui.bootstrap', 'ui.select', 'ngSanitize']);
 
 app.config(function ($httpProvider, $resourceProvider) {
   $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -18,6 +18,12 @@ app.filter('moment', function() {
 	};
 });
 
+app.config(function(uiSelectConfig) {
+  uiSelectConfig.theme = 'bootstrap';
+  uiSelectConfig.resetSearchInput = true;
+  uiSelectConfig.appendToBody = true;
+});
+
 // rutas
 app.config(function($routeProvider) {
   $routeProvider
@@ -31,6 +37,11 @@ app.config(function($routeProvider) {
     .when('/task/:taskId', {
       templateUrl : 'detailTask.html',
       controller  : 'commentsController'
+    })
+
+    .when('/todo', {
+      templateUrl : 'todo.html',
+      controller  : 'todoController'
     })
 
     .otherwise({
@@ -116,6 +127,19 @@ app.factory('clientResource', function ($resource) {
     });
 });
 
+app.factory('todoResource', function ($resource) {
+  return $resource('/todo/:id', {id:'@id'},
+    {
+      'get':    {method:'GET'},
+      'save':   {method:'POST'},
+      'update': {method:'PUT'},
+      'query':  {method:'GET', isArray:true},
+      'remove': {method:'DELETE'},
+      'delete': {method:'DELETE'} 
+    });
+});
+
+
 app.controller('taskController', function ($scope, taskResource) {
 
   function getTasks() {
@@ -141,11 +165,13 @@ app.controller('taskController', function ($scope, taskResource) {
 
 app.controller('modalController', function ($scope, taskResource, clientResource) {
 
+  // carga select con clientes
   clientResource.query({}, function(data){
     $scope.clients = data;
   });
 
-  $scope.saveEntry = function() {
+  // crea trea
+  $scope.newTask = function() {
     $scope.task.userId = 1;
     taskResource.save($scope.task);
   };
@@ -153,43 +179,36 @@ app.controller('modalController', function ($scope, taskResource, clientResource
 })
 
 app.controller('commentsController', function ($scope, taskCommentsResource, $routeParams, taskResource, 
-  notificationResource, taskCommentsResource2, $timeout, $log) {
-  
-$scope.totalItems = 64;
-$scope.currentPage = 4;
+  notificationResource, taskCommentsResource2, $timeout) {
 
-$scope.setPage = function (pageNo) {
-$scope.currentPage = pageNo;
-};
+  // numero de pagina inicial para paginador
+  $scope.currentPage = 1;
 
-$scope.pageChanged = function() {
-$log.log('Page changed to: ' + $scope.currentPage);
-};
-
-$scope.maxSize = 5;
-$scope.bigTotalItems = 175;
-$scope.bigCurrentPage = 1;
-
+  // obtiene el id de la tarea desde la url y la convierte a int
   var taskId = parseInt($routeParams.taskId, 10);
 
-  function getComments() {
-    $scope.tasks = taskResource.query({done: false});
-    $scope.ctasks = taskResource.query({done: true});
-  }
-
-
+  // obtiene comentarios de la tarea seleccionada
   function getComments(){
-    taskCommentsResource.query({ task : taskId }, function(data){
-      $scope.allComments = data;    
+    taskCommentsResource.get({ task : taskId }, function(data){
+      $scope.allComments = data.results;    
+      $scope.totalItems = data.count;
     })
   };
 
   getComments();
 
+  // cuando cambia la pagina , setea numero de pagina en la consulta y actualiza los resultados
+  $scope.pageChanged = function() {
+    taskCommentsResource.get({ task : taskId , page : $scope.currentPage}, function(data){
+      $scope.allComments = data.results;    
+    })
+  };
+
   taskResource.query({ task : taskId }, function(task){
     $scope.task = task[0];    
   });
   
+  // crea nuevo comentario
   $scope.newComment = function () {
     var cm = new taskCommentsResource2;
     cm.task = taskId;
@@ -197,25 +216,95 @@ $scope.bigCurrentPage = 1;
     cm.comment = $scope.cm.comment;
     taskCommentsResource.save(cm);
 
-    //create notification to user
+    // notifica al usuario
     var nt = new notificationResource;
     nt.user = 1;
     nt.ntype = "comment";
     nt.notificationId = taskId;
     notificationResource.save(nt);
     $timeout(getComments, 500);
-    
   }
-
 })
 
 app.controller('mainController', function ($scope, notificationResource) {
 
-  notificationResource.get({}, function(data){
+  var allNotifications = notificationResource.get({user: 1}, function(data){
     $scope.countNotification = data.count;
+    $scope.notifications = data.results;
   });
 
-  //taskCommentsResource.query({task: 2}, function(data){
-  //  $scope.allComments = data;
-  //});
+  $scope.allRead = function () {
+    var cm = new taskCommentsResource2;
+    cm.task = taskId;
+    cm.user = 1;
+    cm.comment = $scope.cm.comment;
+    taskCommentsResource.save(cm);
+
+    // notifica al usuario
+    var nt = new notificationResource;
+    nt.user = 1;
+    nt.ntype = "comment";
+    nt.notificationId = taskId;
+    notificationResource.save(nt);
+    $timeout(getComments, 500);
+  }
 })
+
+app.controller('mainController', function ($scope, notificationResource) {
+
+  var allNotifications = notificationResource.get({user: 1}, function(data){
+    $scope.countNotification = data.count;
+    $scope.notifications = data.results;
+  });
+
+  $scope.allRead = function () {
+    var cm = new taskCommentsResource2;
+    cm.task = taskId;
+    cm.user = 1;
+    cm.comment = $scope.cm.comment;
+    taskCommentsResource.save(cm);
+
+    // notifica al usuario
+    var nt = new notificationResource;
+    nt.user = 1;
+    nt.ntype = "comment";
+    nt.notificationId = taskId;
+    notificationResource.save(nt);
+    $timeout(getComments, 500);
+  }
+
+})
+
+app.controller('todoController', function ($scope, todoResource) {
+
+  TodoResource.get({user: 1}, function(data){
+    $scope.countNotification = data.count;
+    $scope.notifications = data.results;
+  });
+
+  $scope.allRead = function () {
+    var cm = new taskCommentsResource2;
+    cm.task = taskId;
+    cm.user = 1;
+    cm.comment = $scope.cm.comment;
+    taskCommentsResource.save(cm);
+
+    // notifica al usuario
+    var nt = new notificationResource;
+    nt.user = 1;
+    nt.ntype = "comment";
+    nt.notificationId = taskId;
+    notificationResource.save(nt);
+    $timeout(getComments, 500);
+  }
+
+})
+
+
+
+
+
+
+
+
+

@@ -8,6 +8,8 @@ class Notification(models.Model):
     user = models.ForeignKey(User, verbose_name='Usuario')
     ntype = models.CharField(max_length=50, verbose_name="Tipo de notificacion")
     notificationId = models.IntegerField(verbose_name="Id Notification")
+    read = models.BooleanField(default=0);
+    creation_date = models.DateField(auto_now_add=True)
 
     def __unicode__(self):
         return self.id + ' ' + self.user
@@ -34,7 +36,6 @@ class Task(models.Model):
     user = models.ForeignKey(User, verbose_name='Usuario')
     client = models.ForeignKey(Client, verbose_name='Cliente')
     title = models.CharField(max_length=50, verbose_name='Titulo de la tarea')
-    creation_date = models.DateField(null=True, blank=True,auto_now_add=True)
     turnover_code = models.CharField(max_length=50, verbose_name='Codigo en Turnover')
     priority = models.IntegerField(verbose_name='Prioridad')
     urgency = models.IntegerField(verbose_name='Urgencia')
@@ -44,6 +45,7 @@ class Task(models.Model):
     description = models.CharField(max_length=255, verbose_name='Descripcion')
     sar = models.IntegerField(default=0, verbose_name='Incidente')
     done = models.BooleanField(default=0, verbose_name='Completado')
+    creation_date = models.DateField(null=True, blank=True,auto_now_add=True)
 
     def __unicode__(self):
         return self.title
@@ -60,3 +62,9 @@ class TaskComment(models.Model):
 class TaskUser(models.Model):
     task = models.ForeignKey(Task)
     user = models.ForeignKey(User)
+
+class Todo(models.Model):
+    description = models.CharField(max_length=255, verbose_name='Descripcion')
+    user = models.ForeignKey(User, verbose_name="Usuario")
+    done = models.BooleanField(default=0, verbose_name='Completado')
+    creation_date = models.DateTimeField(auto_now_add=True)

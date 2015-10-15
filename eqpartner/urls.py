@@ -6,7 +6,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from task.models import Task, Client, Organization, TaskComment, Notification
+from task.models import Task, Client, Organization, TaskComment, Notification, Todo
 
 from django.forms import ModelForm
 
@@ -14,10 +14,9 @@ from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
 
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 100
+    page_size = 5
     page_size_query_param = 'page_size'
-    max_page_size = 1000
-
+    max_page_size = 100
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -29,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ('id', 'user', 'ntype', 'notificationId')
+        fields = ('id', 'user', 'ntype', 'notificationId', 'read')
 
 class TaskSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -58,6 +57,12 @@ class TaskCommentSerializer2(serializers.ModelSerializer):
         model = TaskComment
         fields = ('id', 'task', 'user', 'comment', 'creation_date')
 
+
+class TodoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = ('description', 'done', 'user')
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -68,6 +73,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     pagination_class = StandardResultsSetPagination
+    filter_fields = ('notificationId', 'user')
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -90,12 +96,19 @@ class TaskCommentViewSet(viewsets.ModelViewSet):
     serializer_class = TaskCommentSerializer2
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('task', 'user')
+    pagination_class = StandardResultsSetPagination
 
 class TaskCommentViewSet2(viewsets.ModelViewSet):
     queryset = TaskComment.objects.all()
     serializer_class = TaskCommentSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('task', 'user')
+
+class TodoViewSet(viewsets.ModelViewSet):
+    queryset = Todo.objects.all()
+    serializer_class = TodoSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('done', 'user')
 
 router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)
@@ -105,6 +118,7 @@ router.register(r'taskComment', TaskCommentViewSet)
 router.register(r'taskComment2', TaskCommentViewSet2)
 router.register(r'user', UserViewSet)
 router.register(r'notification', NotificationViewSet)
+router.register(r'todo', TodoViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

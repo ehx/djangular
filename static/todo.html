@@ -1,0 +1,45 @@
+<!-- sub header -->
+<div class="bg-light lter b-b wrapper-md">
+  <div class="row">
+    <div class="col-sm-6 col-xs-12">
+      <h1 class="m-n font-thin h3 text-black">Mis tareas</h1>
+      <small class="text-muted">tareas a realizar</small>
+    </div>
+  </div>
+</div>
+<!-- sub header -->
+
+<div class="wrapper-md ng-scope" ng-controller="TodoCtrl">
+  <div>
+    <form id="todo-form" ng-submit="addTodo()" class="ng-pristine ng-valid">
+      <input placeholder="Tarea a realizar" ng-model="newTodo" autofocus="" class="form-control input-lg ng-pristine ng-valid ng-touched" tabindex="0" aria-invalid="false" style="">
+    </form>
+  </div>
+  <div ng-show="todos.length" aria-hidden="false" class="">
+    <ul class="nav nav-xs nav-pills m-t m-b">
+      <li ui-sref-active="active">
+        <a href="#/todo/">Todas</a>
+      </li>
+      <li ui-sref-active="active">
+        <a href="#/todo/active">Activas</a>
+      </li>
+      <li ui-sref-active="active">
+        <a href="#/todo/completed">Completas</a>
+      </li>
+    </ul>
+    <ul class="list-group">
+      <li ng-repeat="todo in todos | filter:statusFilter track by $index" ng-class="{completed: todo.completed, editing: todo == editedTodo}" class="list-group-item ng-scope">
+        <div class="hover-anchor" ng-dblclick="editTodo(todo)" ng-hide="todo.editedTodo" tabindex="0" aria-hidden="false">
+          <a ng-click="removeTodo(todo)" class="text-muted hover-action" tabindex="0"><i class="icon-close text-md m-t-xs pull-right"></i></a>
+          <label class="i-checks i-checks-sm">
+            <input type="checkbox" ng-model="todo.completed" ng-change="todoCompleted(todo)" class="ng-pristine ng-untouched ng-valid" tabindex="0" aria-checked="false" aria-invalid="false"><i></i>
+          </label>
+          <span ng-dblclick="editTodo(todo)" class="ng-binding" tabindex="0">12</span>
+        </div>
+        <form ng-submit="doneEditing(todo)" ng-show="todo.editedTodo" class="ng-pristine ng-valid ng-hide" aria-hidden="true">
+          <input class="form-control ng-pristine ng-untouched ng-valid" ng-trim="false" ng-model="todo.title" ng-blur="doneEditing(todo)" ui-focus="todo.editedTodo" tabindex="0" aria-invalid="false">
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>

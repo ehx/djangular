@@ -20,7 +20,7 @@
       <div class="modal-body">
         <div class="form-group">
           <label for="usr">Titulo :</label>
-          <input type='text' class="form-control" ng-model="task.title">
+          <input required type='text' class="form-control" ng-model="task.title">
         </div>
         <div class="form-group">
           <label for="clientSelect">Cliente :</label>
@@ -62,7 +62,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" ng-click="saveEntry()">Save</button>
+        <button class="btn btn-primary" ng-click="newTask()">Save</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -76,7 +76,7 @@
       <div class="col-md-12 b-light no-border-xs">
         <a href="" class="text-muted pull-right text-lg"></a>
         <h4 class="font-thin m-t-none m-b-md text-muted">Tareas</h4>
-        <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">+</button> -->
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">+</button> 
         <div class=" m-b">
           <div class="m-b" ng-repeat="tdTask in tasks">
             <span class="label text-base bg-info pos-rlt m-r">
