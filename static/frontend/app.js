@@ -1,5 +1,5 @@
 //para hacer uso de $resource debemos colocarlo al crear el modulo
-var app = angular.module('app', ["ngResource", 'ngCookies', 'ngRoute']);
+var app = angular.module('app', ["ngResource", 'ngCookies', 'ngRoute', 'ui.bootstrap']);
 
 app.config(function ($httpProvider, $resourceProvider) {
   $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -12,6 +12,11 @@ app.run(['$http', '$cookies', function($http, $cookies) {
   $http.defaults.headers.common['X-CSRFToken'] = $cookies['csrftoken'];
 }]);
 
+app.filter('moment', function() {
+    return function(dateString, format) {
+        return moment(dateString).format(format);
+	};
+});
 
 // rutas
 app.config(function($routeProvider) {
@@ -148,7 +153,22 @@ app.controller('modalController', function ($scope, taskResource, clientResource
 })
 
 app.controller('commentsController', function ($scope, taskCommentsResource, $routeParams, taskResource, 
-  notificationResource, taskCommentsResource2, $timeout) {
+  notificationResource, taskCommentsResource2, $timeout, $log) {
+  
+$scope.totalItems = 64;
+$scope.currentPage = 4;
+
+$scope.setPage = function (pageNo) {
+$scope.currentPage = pageNo;
+};
+
+$scope.pageChanged = function() {
+$log.log('Page changed to: ' + $scope.currentPage);
+};
+
+$scope.maxSize = 5;
+$scope.bigTotalItems = 175;
+$scope.bigCurrentPage = 1;
 
   var taskId = parseInt($routeParams.taskId, 10);
 

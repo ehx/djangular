@@ -1592,9 +1592,9 @@ pre code {
     margin-right: auto;
     margin-left: auto
 }
-.row {
-    margin-right: -15px;
-    margin-left: -15px
+.no-margin {
+    margin-right: 0px;
+    margin-left: 0px
 }
 .col-xs-1,
 .col-sm-1,
