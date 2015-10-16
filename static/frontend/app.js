@@ -39,9 +39,19 @@ app.config(function($routeProvider) {
       controller  : 'commentsController'
     })
 
-    .when('/todo', {
+    .when('/todo/', {
       templateUrl : 'todo.html',
       controller  : 'todoController'
+    })
+
+    .when('/todo/:done', {
+      templateUrl : 'todo.html',
+      controller  : 'todoController'
+    })
+
+    .when('/client/', {
+      templateUrl : 'client.html',
+      controller  : 'clientController'
     })
 
     .otherwise({
@@ -139,7 +149,6 @@ app.factory('todoResource', function ($resource) {
     });
 });
 
-
 app.controller('taskController', function ($scope, taskResource) {
 
   function getTasks() {
@@ -214,14 +223,14 @@ app.controller('commentsController', function ($scope, taskCommentsResource, $ro
     cm.task = taskId;
     cm.user = 1;
     cm.comment = $scope.cm.comment;
-    taskCommentsResource.save(cm);
+    cm.$save();
 
     // notifica al usuario
     var nt = new notificationResource;
     nt.user = 1;
     nt.ntype = "comment";
     nt.notificationId = taskId;
-    notificationResource.save(nt);
+    nt.$save();
     $timeout(getComments, 500);
   }
 })
@@ -238,14 +247,14 @@ app.controller('mainController', function ($scope, notificationResource) {
     cm.task = taskId;
     cm.user = 1;
     cm.comment = $scope.cm.comment;
-    taskCommentsResource.save(cm);
+    cm.$save();
 
     // notifica al usuario
     var nt = new notificationResource;
     nt.user = 1;
     nt.ntype = "comment";
     nt.notificationId = taskId;
-    notificationResource.save(nt);
+    nt.$save();
     $timeout(getComments, 500);
   }
 })
@@ -262,49 +271,61 @@ app.controller('mainController', function ($scope, notificationResource) {
     cm.task = taskId;
     cm.user = 1;
     cm.comment = $scope.cm.comment;
-    taskCommentsResource.save(cm);
+    cm.$save();
 
     // notifica al usuario
     var nt = new notificationResource;
     nt.user = 1;
     nt.ntype = "comment";
     nt.notificationId = taskId;
-    notificationResource.save(nt);
+    nt.$save();
     $timeout(getComments, 500);
   }
 
 })
 
-app.controller('todoController', function ($scope, todoResource) {
+app.controller('todoController', function ($scope, todoResource, $timeout, $routeParams) {
 
-  TodoResource.get({user: 1}, function(data){
-    $scope.countNotification = data.count;
-    $scope.notifications = data.results;
-  });
+  getTodoTask = function() {
+    todoResource.query({user: 1}, function(data){
+      $scope.todoTasks = data;
+    });
+  };
 
-  $scope.allRead = function () {
-    var cm = new taskCommentsResource2;
-    cm.task = taskId;
-    cm.user = 1;
-    cm.comment = $scope.cm.comment;
-    taskCommentsResource.save(cm);
+  getTodoTask();
 
-    // notifica al usuario
-    var nt = new notificationResource;
-    nt.user = 1;
-    nt.ntype = "comment";
-    nt.notificationId = taskId;
-    notificationResource.save(nt);
-    $timeout(getComments, 500);
+  $scope.addTodo = function () {
+    var td = new todoResource;
+    td.description = $scope.description;
+    td.user = 1;
+    td.$save();
+    $timeout(getTodoTask, 500);
   }
 
+  $scope.deleteTodo = function (todoId) {
+    todoResource.get({id: todoId}, function(data){
+      todoResource.delete({id : data.id});
+      $timeout(getTodoTask, 500);
+    });
+  }
+
+  $scope.doneTodo = function (todoId) {
+    var td = todoResource.get({id : todoId}, function(data){
+      var td = data;
+      td.done = !td.done;
+      td.$update();
+      $timeout(getTodoTask, 500);
+    });
+  }
 })
 
+app.controller('clientController', function ($scope, clientResource) {
 
+  getClients = function() {
+    clientResource.query({}, function(data){
+      $scope.clients = data;
+    });
+  };
 
-
-
-
-
-
-
+  getClients();
+})

@@ -1,0 +1,86 @@
+    <div class="hbox hbox-auto-xs hbox-auto-sm bg-light  ng-scope" ng-controller="clientController">
+
+      <!-- 1er columna -->
+      <div class="col w b-r">
+        <div class="vbox">
+          <div class="row-row">
+            <div class="cell scrollable hover">
+              <div class="cell-inner">
+                <div class="list-group no-radius no-border no-bg m-b-none">
+                  <a class="list-group-item b-b focus">Todos los contactos</a>
+                  <a ng-repeat="client in clients" class="list-group-item m-l hover-anchor b-a no-select">
+                    <span class="block m-l-n ng-binding">{{client.name}} {{client.lastname}}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /columna -->
+
+      <!-- 2da column -->
+      <div class="col w-lg lter b-r">
+        <div class="vbox">
+          <div class="wrapper-xs b-b">
+            <div class="input-group m-b-xxs">
+              <span class="input-group-addon input-sm no-border no-bg"><i class="icon-magnifier text-md m-t-xxs"></i></span>
+              <input type="text" class="form-control input-sm no-border no-bg text-md ng-pristine ng-untouched ng-valid" placeholder="Search All Contacts" ng-model="query" tabindex="0" aria-invalid="false">
+            </div>
+          </div>
+          <div class="row-row">
+            <div class="cell scrollable hover">
+              <div class="cell-inner">
+                <div class="m-t-n-xxs">
+                  <div class="list-group list-group-lg no-radius no-border no-bg m-b-none">
+                    <!-- cliente en organizacion -->
+                    <a ng-repeat="client in clients | orderBy:'lastname'" class="list-group-item m-l">
+                      <span class="block text-ellipsis m-l-n text-md ng-binding">
+                        {{client.name}} {{client.lastname}}
+                      </span>
+                    </a>
+                    <!-- /cliente en organizacion -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /columna -->
+
+  <!-- 3er columna -->
+  <div class="col bg-white-only">
+    <div class="vbox">
+      <div class="wrapper-sm b-b">
+        <div class="m-t-n-xxs m-b-n-xxs m-l-xs">
+          <a class="btn btn-xs btn-default pull-right" ng-hide="!item" ng-click="deleteItem(item)" tabindex="0" aria-hidden="false" style=""><i class="fa fa-times"></i></a>
+          <a class="btn btn-xs btn-default" ng-hide="item.editing" ng-click="editItem(item)" tabindex="0" aria-hidden="false">Editar</a>
+          <a class="btn btn-xs btn-default ng-hide" ng-show="item.editing" ng-click="doneEditing(item)" tabindex="0" aria-hidden="true">Done</a>
+        </div>
+      </div>
+      <div class="row-row">
+        <div class="cell">
+          <div class="cell-inner">
+            <div class="wrapper-lg">
+              <div class="hbox h-auto m-b-lg">
+                <div class="col text-center w-sm">
+                  <div class="thumb-lg avatar inline">
+                    <img ng-show="item.avatar" aria-hidden="false" class="" ng-src="img/a2.jpg" src="img/a2.jpg" style="">
+                  </div>
+                </div>
+                <div class="col v-middle h1 font-thin">
+                  <div ng-hide="item.editing" class="ng-binding" aria-hidden="false">Annabelle </div>
+                  <div ng-show="item.editing" aria-hidden="true" class="ng-hide">
+                    <input type="text" placeholder="First" class="form-control w-auto input-lg m-b-n-xxs font-bold ng-pristine ng-untouched ng-valid" ng-model="item.first" tabindex="0" aria-invalid="false">
+                    <input type="text" placeholder="Last" class="form-control w-auto input-lg font-bold ng-pristine ng-untouched ng-valid" ng-model="item.last" tabindex="0" aria-invalid="false">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /columna -->

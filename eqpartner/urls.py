@@ -61,7 +61,7 @@ class TaskCommentSerializer2(serializers.ModelSerializer):
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
-        fields = ('description', 'done', 'user')
+        fields = ('id', 'done', 'user', 'description')
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -85,6 +85,7 @@ class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
     filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('id', 'name', 'lastname', 'organizationId')
 
 class OrganizationViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all()
@@ -108,7 +109,7 @@ class TodoViewSet(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('done', 'user')
+    filter_fields = ('id', 'done', 'user')
 
 router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)
