@@ -28,7 +28,7 @@
           <div class="col-xs-6">
             <div class="form-group">
               <label for="clientSelect">Cliente :</label>
-              <select required name="singleSelect" id="clientSelect" ng-model="task.client" class="form-control">
+              <select name="singleSelect" id="clientSelect" ng-model="task.clientId" class="form-control">
                 <option ng-repeat="option in clients" value="{{option.id}}">{{option.name}} {{option.lastname}}</option>
               </select>
             </div>
@@ -106,21 +106,21 @@
       <div class="col-md-12 b-light no-border-xs">
         <a href="" class="text-muted pull-right text-lg"></a>
         <h4 class="font-thin m-t-none m-b-md text-muted">Tareas</h4>
-        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">+</button> 
+
         <div class=" m-b">
-          <div class="m-b" ng-repeat="tdTask in tasks">
-            <span class="label text-base bg-info pos-rlt m-r">
-              <i class="arrow right arrow-info"></i>
-              {{tdTask.finish_date}}
-            </span>
-            <a href="#/task/{{tdTask.id}}">{{tdTask.title}}</a>
-            <span class="pull-right label text-base-12 bg-primary-white pos-rlt m-r">Prioridad: {{ tdTask.priority }}</span>
-            <span class="pull-right label text-base-12 bg-success-white pos-rlt m-r">Horas estimadas: {{ tdTask.estimation_hours }}
-            </span>
-          </div>
+          <ul class="ds-btn">
+            <li ng-repeat="tdTask in tasks">
+              <a href="#/task/{{tdTask.id}}" class="btn btn-lg btn-info">
+                <i class="glyphicon glyphicon-link pull-left"></i>
+                <span>{{tdTask.title}}<br><small>{{tdTask.start_date}}</small></span>
+              </a> 
+            </li>
+          </ul>
         </div>
       </div>
     </div>
   </div>
   <!-- / tasks -->
 </div>
+
+

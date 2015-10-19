@@ -14869,3 +14869,7 @@ a.text-#000000:hover {
 .mdi-toggle-radio-button-on:before {
     content: "\e8e4"
 }
+
+.ds-btn li{ list-style:none; float:left; padding:10px; }
+.ds-btn li a span{padding-left:15px;padding-right:5px;width:100%;display:inline-block; text-align:left;}
+.ds-btn li a span small{width:100%; display:inline-block; text-align:left;}

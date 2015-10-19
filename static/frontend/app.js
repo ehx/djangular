@@ -1,5 +1,6 @@
 //para hacer uso de $resource debemos colocarlo al crear el modulo
-var app = angular.module('app', ["ngResource", 'ngCookies', 'ngRoute', 'ui.bootstrap', 'ui.select', 'ngSanitize']);
+var app = angular.module('app', ["ngResource", 'ngCookies', 'ngRoute', 'ui.bootstrap', 'ui.select',
+ 'ngSanitize', 'xeditable']);
 
 app.config(function ($httpProvider, $resourceProvider) {
   $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -11,6 +12,10 @@ app.config(function ($httpProvider, $resourceProvider) {
 app.run(['$http', '$cookies', function($http, $cookies) {
   $http.defaults.headers.common['X-CSRFToken'] = $cookies['csrftoken'];
 }]);
+
+app.run(function(editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});
 
 app.filter('moment', function() {
     return function(dateString, format) {
@@ -54,11 +59,20 @@ app.config(function($routeProvider) {
       controller  : 'clientController'
     })
 
+    .when('/2/', {
+      templateUrl : 'task2.html',
+      controller  : 'taskController'
+    })
+
+    .when('/3/', {
+      templateUrl : 'task3.html',
+      controller  : 'taskController'
+    })
+
     .otherwise({
       redirectTo: '/'
     });
 });
-
 
 app.directive('jqdatepicker', function () {
     return {
@@ -80,7 +94,7 @@ app.directive('jqdatepicker', function () {
 app.factory('taskResource', function ($resource) {
   return $resource('/task/:id', {id:'@id'},
     {
-      'get':    {method:'GET'},
+      'get':    {method:'GET', isArray:false},
       'save':   {method:'POST'},
       'update': {method:'PUT'},
       'query':  {method:'GET', isArray:true},
@@ -181,7 +195,7 @@ app.controller('modalController', function ($scope, taskResource, clientResource
 
   // crea trea
   $scope.newTask = function() {
-    $scope.task.userId = 1;
+    $scope.task.user = 1;
     taskResource.save($scope.task);
   };
 
@@ -198,7 +212,7 @@ app.controller('commentsController', function ($scope, taskCommentsResource, $ro
 
   // obtiene comentarios de la tarea seleccionada
   function getComments(){
-    taskCommentsResource.get({ task : taskId }, function(data){
+   taskCommentsResource.get({ task : taskId }, function(data){
       $scope.allComments = data.results;    
       $scope.totalItems = data.count;
     })
@@ -213,10 +227,6 @@ app.controller('commentsController', function ($scope, taskCommentsResource, $ro
     })
   };
 
-  taskResource.query({ task : taskId }, function(task){
-    $scope.task = task[0];    
-  });
-  
   // crea nuevo comentario
   $scope.newComment = function () {
     var cm = new taskCommentsResource2;
@@ -232,6 +242,17 @@ app.controller('commentsController', function ($scope, taskCommentsResource, $ro
     nt.notificationId = taskId;
     nt.$save();
     $timeout(getComments, 500);
+  }
+
+  // obtengo tarea actual
+  cTask = taskResource.get({ id : taskId }, function(task){
+    $scope.task = task;   
+  });
+
+  // actualiza tarea actual
+  $scope.updateTask = function(){
+    cTask = $scope.task;
+    cTask.$update();
   }
 })
 

@@ -18,10 +18,14 @@
           <div class="col-xs-12">
             <strong>{{task.title}}</strong>
             <p>
-              Descripcion : {{task.description}}<br>
-              Fecha de inicio : {{task.start_date}}<br>
-              Fecha de finalizacion : {{task.finish_date}}<br>
-              Horas estimadas : {{task.estimation_hours}}<br>
+              Descripcion : 
+              <a href="#" editable-text="task.description" onaftersave="updateTask()">{{task.description}}</a><br>
+              Fecha de inicio : 
+              <a href="#" editable-bsdate="task.start_date" e-datepicker-popup="dd-MMMM-yyyy" onaftersave="updateTask()">{{task.start_date}}</a><br>
+              Fecha de finalizacion : 
+              <a href="#" editable-bsdate="task.finish_date" e-datepicker-popup="dd-MMMM-yyyy" onaftersave="updateTask()">{{task.finish_date}}</a><br>
+              Horas estimadas : 
+              <a href="#" editable-text="task.estimation_hours" onaftersave="updateTask()">{{task.estimation_hours}}</a><br>
             </p>
           </div>
         </div>
