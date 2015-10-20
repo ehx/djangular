@@ -103,6 +103,18 @@ app.factory('taskResource', function ($resource) {
     });
 });
 
+app.factory('organizationResource', function ($resource) {
+  return $resource('/organization/:id', {id:'@id'},
+    {
+      'get':    {method:'GET', isArray:false},
+      'save':   {method:'POST'},
+      'update': {method:'PUT'},
+      'query':  {method:'GET', isArray:true},
+      'remove': {method:'DELETE'},
+      'delete': {method:'DELETE'} 
+    });
+});
+
 app.factory('notificationResource', function ($resource) {
   return $resource('/notification/:id', {id:'@id'},
     {
@@ -111,7 +123,8 @@ app.factory('notificationResource', function ($resource) {
       'update': {method:'PUT'},
       'query':  {method:'GET', isArray:true},
       'remove': {method:'DELETE'},
-      'delete': {method:'DELETE'} 
+      'delete': {method:'DELETE'},
+      'markAsRead': { method: 'POST', isArray: true }
     });
 });
 
@@ -239,7 +252,7 @@ app.controller('commentsController', function ($scope, taskCommentsResource, $ro
     var nt = new notificationResource;
     nt.user = 1;
     nt.ntype = "comment";
-    nt.notificationId = taskId;
+    nt.notification = taskId;
     nt.$save();
     $timeout(getComments, 500);
   }
@@ -254,55 +267,30 @@ app.controller('commentsController', function ($scope, taskCommentsResource, $ro
     cTask = $scope.task;
     cTask.$update();
   }
+
+
 })
 
-app.controller('mainController', function ($scope, notificationResource) {
+app.controller('mainController', function ($scope, notificationResource, $timeout) {
 
-  var allNotifications = notificationResource.get({user: 1}, function(data){
-    $scope.countNotification = data.count;
-    $scope.notifications = data.results;
-  });
+  getAllNotifications = function() {
+    notificationResource.get({read: 'False'}, function(data){
+      $scope.countNotification = data.count;
+      $scope.notifications = data.results;
+    });
+  };
 
-  $scope.allRead = function () {
-    var cm = new taskCommentsResource2;
-    cm.task = taskId;
-    cm.user = 1;
-    cm.comment = $scope.cm.comment;
-    cm.$save();
+  // obtiene todas las notificaciones
+  getAllNotifications();
 
-    // notifica al usuario
-    var nt = new notificationResource;
-    nt.user = 1;
-    nt.ntype = "comment";
-    nt.notificationId = taskId;
-    nt.$save();
-    $timeout(getComments, 500);
+  // marca todas como leidas
+  $scope.markAsRead = function(all){
+    all.forEach(function(data) {
+      data.read = true;
+      notificationResource.update({id : data.id}, data);
+    });
+    $timeout(getAllNotifications, 500);
   }
-})
-
-app.controller('mainController', function ($scope, notificationResource) {
-
-  var allNotifications = notificationResource.get({user: 1}, function(data){
-    $scope.countNotification = data.count;
-    $scope.notifications = data.results;
-  });
-
-  $scope.allRead = function () {
-    var cm = new taskCommentsResource2;
-    cm.task = taskId;
-    cm.user = 1;
-    cm.comment = $scope.cm.comment;
-    cm.$save();
-
-    // notifica al usuario
-    var nt = new notificationResource;
-    nt.user = 1;
-    nt.ntype = "comment";
-    nt.notificationId = taskId;
-    nt.$save();
-    $timeout(getComments, 500);
-  }
-
 })
 
 app.controller('todoController', function ($scope, todoResource, $timeout, $routeParams) {
@@ -340,7 +328,16 @@ app.controller('todoController', function ($scope, todoResource, $timeout, $rout
   }
 })
 
-app.controller('clientController', function ($scope, clientResource) {
+app.controller('clientController', function ($scope, clientResource, organizationResource) {
+  $scope.vm = {
+    selectedOrg : null
+  };
+
+  getOrganizations = function() {
+    organizationResource.query({}, function(data){
+      $scope.organizations = data;
+    });
+  };
 
   getClients = function() {
     clientResource.query({}, function(data){
@@ -349,4 +346,15 @@ app.controller('clientController', function ($scope, clientResource) {
   };
 
   getClients();
+  getOrganizations();
+
+  $scope.getClient = function(id) {
+    clientResource.get({id}, function(data){
+      $scope.client = data;
+    });
+  };
+
+  $scope.setOrganization = function(id) {  
+    $scope.org = id;
+  }
 })

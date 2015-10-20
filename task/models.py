@@ -7,8 +7,8 @@ from django.utils import timezone
 class Notification(models.Model):
     user = models.ForeignKey(User, verbose_name='Usuario')
     ntype = models.CharField(max_length=50, verbose_name="Tipo de notificacion")
-    notificationId = models.IntegerField(verbose_name="Id Notification")
-    read = models.BooleanField(default=0);
+    notification = models.IntegerField(verbose_name="Notification")
+    read = models.BooleanField(default=0, verbose_name="Leida?");
     creation_date = models.DateField(auto_now_add=True)
 
     def __unicode__(self):
@@ -27,7 +27,7 @@ class Client(models.Model):
     address = models.CharField(max_length=50, verbose_name='Direccion')
     telephone = models.IntegerField(verbose_name='Telefono')
     mail = models.EmailField(max_length=254, verbose_name='Mail')
-    organizationId = models.ForeignKey(Organization, verbose_name="Organizacion")
+    organization = models.ForeignKey(Organization, verbose_name="Organizacion")
 
     def __unicode__(self):
         return self.name + ' ' + self.lastname

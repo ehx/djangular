@@ -13,6 +13,8 @@ from django.forms import ModelForm
 from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
 
+
+
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 5
     page_size_query_param = 'page_size'
@@ -28,7 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ('id', 'user', 'ntype', 'notificationId', 'read')
+        fields = ('id', 'user', 'ntype', 'notification', 'read')
 
 class TaskSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
@@ -73,7 +75,15 @@ class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     pagination_class = StandardResultsSetPagination
-    filter_fields = ('notificationId', 'user')
+    filter_fields = ('notification', 'user', 'read')
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return Notification.objects.filter(user=user)
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -85,7 +95,7 @@ class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('id', 'name', 'lastname', 'organizationId')
+    filter_fields = ('id', 'name', 'lastname', 'organization')
 
 class OrganizationViewSet(viewsets.ModelViewSet):
     queryset = Organization.objects.all()
@@ -111,6 +121,8 @@ class TodoViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'done', 'user')
 
+
+
 router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)
 router.register(r'client', ClientViewSet)
@@ -120,6 +132,9 @@ router.register(r'taskComment2', TaskCommentViewSet2)
 router.register(r'user', UserViewSet)
 router.register(r'notification', NotificationViewSet)
 router.register(r'todo', TodoViewSet)
+
+
+
 
 urlpatterns = [
     url(r'^', include(router.urls)),
