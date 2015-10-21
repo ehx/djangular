@@ -1,148 +1,139 @@
 <!DOCTYPE html>
 <html lang="es" data-ng-app="app" class="">
-<head>
-  <meta charset="utf-8">
-  <title>Titulo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css">
-  <link rel="stylesheet" href="./index2_files/app.min.css" type="text/css">
-  <link rel="stylesheet" href="./index2_files/animate.css" type="text/css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="./index2_files/simple-line-icons.css" type="text/css">
-  <link href="./index2_files/xeditable.css" rel="stylesheet"/>
-  
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" type="text/css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.13.2/select.min.css" type="text/css">
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.13.2/select.min.css" type="text/css">
-  
-  
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-</head>
-<body>
-  <!-- main -->
-  <div class="app" ng-controller="mainController">
-    <!-- header -->   
-    <div class="collapse pos-rlt navbar-collapse box-shadow bg-info dker">
-      <ul class="nav navbar-nav">
-        <li>
-          <a href="#/">
-            <span>Lista de tareas</span> 
-          </a>
-        </li>
-        <li>
-          <a href="#/messages">
-            <span>Centro de mensajes</span> 
-          </a>
-        </li>
-        <li>
-          <a href="#/config">
-            <span>Configuracion</span> 
-          </a>
-        </li>
-        <li>
-          <a href="#/history">
-            <span>Historia</span> 
-          </a>
-        </li>
-        <li>
-          <a href="#/todo">
-            <span>Mis tareas</span> 
-          </a>
-        </li>
-        <li>
-          <a href="#/client">
-            <span>Clientes</span> 
-          </a>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown" dropdown="">
-          <a href="" class="dropdown-toggle" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-bell"></i>
-            <span class="visible-xs-inline">Notificaciones</span>
-            <span ng-if="countNotification > 0" class="badge badge-sm up bg-danger pull-right-xs">{{countNotification}}</span>
-          </a>
-          <!-- dropdown -->
-          <div class="dropdown-menu w-xl">
-            <div class="panel bg-white">
-              <div class="panel-heading b-light bg-light">
-                <strong ng-if="countNotification > 0">Notificaciones</strong>
-                <strong ng-if="countNotification === 0">Sin Notificaciones</strong>
-              </div>
-              <div class="list-group" ng-if="countNotification > 0">
-                <a href="" class="list-group-item clearfix" ng-repeat="nt in notifications">
-                  <span class="pull-left m-r">
-                    <span class="fa-stack fa-lg">
-                      <i class="fa fa-square fa-stack-2x"></i>
-                      <i class="fa fa-comments-o fa-stack-1x fa-inverse"></i>
+  <head>
+    <title>Titulo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,300'>
+    <link rel="stylesheet" type='text/css' href="components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type='text/css' href="components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type='text/css' href="components/angular-xeditable/dist/css/xeditable.css"/>
+    <link rel="stylesheet" type='text/css' href="components/jquery-ui/themes/base/jquery-ui.css">
+    <link rel="stylesheet" type='text/css' href="components/ui-select/dist/select.min.css">
+    <link rel="stylesheet" type='text/css' href="app.min.css">
+  </head>
+  <body>
+    <!-- main -->
+    <div class="app" ng-controller="mainController">
+      <!-- header -->   
+      <div class="collapse pos-rlt navbar-collapse box-shadow bg-info dker">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#/">
+              <span>Lista de tareas</span> 
+            </a>
+          </li>
+          <li>
+            <a href="#/messages">
+              <span>Centro de mensajes</span> 
+            </a>
+          </li>
+          <li>
+            <a href="#/config">
+              <span>Configuracion</span> 
+            </a>
+          </li>
+          <li>
+            <a href="#/history">
+              <span>Historia</span> 
+            </a>
+          </li>
+          <li>
+            <a href="#/todo">
+              <span>Mis tareas</span> 
+            </a>
+          </li>
+          <li>
+            <a href="#/client">
+              <span>Clientes</span> 
+            </a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown" dropdown="">
+            <a href="" class="dropdown-toggle" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-bell"></i>
+              <span class="visible-xs-inline">Notificaciones</span>
+              <span ng-if="countNotification > 0" class="badge badge-sm up bg-danger pull-right-xs">{{countNotification}}</span>
+            </a>
+            <!-- dropdown -->
+            <div class="dropdown-menu w-xl">
+              <div class="panel bg-white">
+                <div class="panel-heading b-light bg-light">
+                  <strong ng-if="countNotification > 0">Notificaciones</strong>
+                  <strong ng-if="countNotification === 0">Sin Notificaciones</strong>
+                </div>
+                <div class="list-group" ng-if="countNotification > 0">
+                  <a href="" class="list-group-item clearfix" ng-repeat="nt in notifications">
+                    <span class="pull-left m-r">
+                      <span class="fa-stack fa-lg">
+                        <i class="fa fa-square fa-stack-2x"></i>
+                        <i class="fa fa-comments-o fa-stack-1x fa-inverse"></i>
+                      </span>
                     </span>
-                  </span>
-                  <span class="clear block m-b-none">
-                    {{nt.user.first_name}} {{nt.user.last_name}}<br>
-                    <small class="text-muted">{{nt.creation_date | moment:'lll'}}</small>
-                  </span>
-                </a>
-              </div>
-              <div class="panel-footer text-sm">
-                <a ng-if="countNotification > 0" href="#notes" ng-click="markAsRead(notifications)" data-toggle="class:show animated fadeInRight">Marcar todas como leidas</a>
-
+                    <span class="clear block m-b-none">
+                      {{nt.user.first_name}} {{nt.user.last_name}}<br>
+                      <small class="text-muted">{{nt.creation_date | moment:'lll'}}</small>
+                    </span>
+                  </a>
+                </div>
+                <div class="panel-footer text-sm">
+                  <a ng-if="countNotification > 0" href="#notes" ng-click="markAsRead(notifications)" data-toggle="class:show animated fadeInRight">Marcar todas como leidas</a>
+                  </div>
               </div>
             </div>
-          </div>
-          <!-- / dropdown -->
-        </li>
-        <li class="dropdown" dropdown="">
-          <a href="" class="dropdown-toggle clear" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
-            <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
-              <img src="./index2_files/user.jpg">
-              <i class="on md b-white bottom"></i>
-            </span>
-            <span class="hidden-sm hidden-md">Usuario</span> <b class="caret"></b>
-          </a>
-        </li>
-      </ul>
-    </div>
-    <!-- / header -->
-
-    <!-- main-content -->
-    <div class="col">
-      <div ng-view></div>  
-    </div>
-    <!-- / main-content -->
-  <!-- / main -->
-  </div>
-  <!-- /content -->
-
-  <!-- footer -->
-  <footer class="footer bg-light b-t wrapper">
-      <div class="container">
-        <span class="pull-right">
-          <a href="" ui-scroll-to="app" class="m-l-sm text-muted">
-            <i class="fa fa-long-arrow-up"></i>
-          </a>
-        </span>
-        © 2015 Copyright.
+            <!-- / dropdown -->
+          </li>
+          <li class="dropdown" dropdown="">
+            <a href="" class="dropdown-toggle clear" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
+                <img src="img/user.jpg">
+                <i class="on md b-white bottom"></i>
+              </span>
+              <span class="hidden-sm hidden-md">Usuario</span> <b class="caret"></b>
+            </a>
+          </li>
+        </ul>
       </div>
-  </footer>
+      <!-- / header -->
   
-
-  <script type="text/javascript" src="frontend/angular.min.js"></script>
-  <script type="text/javascript" src="frontend/angular-resource.min.js"></script>
-  <script type="text/javascript" src="frontend/angular-route.min.js"></script>
-  <script type="text/javascript" src="frontend/ui-bootstrap-tpls-0.14.0.min.js"></script>
-  <script type="text/javascript" src="frontend/app.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
-  <script type="text/javascript" src="frontend/angular-cookies.min.js"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="frontend/moment-with-locales.min.js"></script>
-  <script type="text/javascript" src="frontend/angular-moment.min.js"></script>
-  <script type="text/javascript" src="frontend/select.min.js"></script>
-  <script type="text/javascript" src="frontend/angular-sanitize.min.js"></script>
-  <script type="text/javascript" src="frontend/angular-file-upload.min.js"></script>
-  <script type="text/javascript" src="frontend/xeditable.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.13.2/select.min.js"></script>
+      <!-- main-content -->
+      <div class="col">
+        <div ng-view></div>  
+      </div>
+      <!-- / main-content -->
+    <!-- / main -->
+    </div>
+    <!-- /content -->
   
-</body>
+    <!-- footer -->
+    <footer class="footer bg-light b-t wrapper">
+        <div class="container">
+          <span class="pull-right">
+            <a href="" ui-scroll-to="app" class="m-l-sm text-muted">
+              <i class="fa fa-long-arrow-up"></i>
+            </a>
+          </span>
+          © 2015 Copyright.
+        </div>
+    </footer>
+    
+    <!-- javascripts -->  
+    <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="components/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="components/angular-resource/angular-resource.min.js"></script>
+    <script type="text/javascript" src="components/angular-route/angular-route.min.js"></script>
+    <script type="text/javascript" src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="components/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="components/angular-cookies/angular-cookies.min.js"></script>
+    <script type="text/javascript" src="components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="components/moment/min/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="components/angular-xeditable/dist/js/xeditable.min.js"></script>
+    <script type="text/javascript" src="components/ui-select/dist/select.min.js"></script>
+    <script type="text/javascript" src="app.min.js"></script>
+  </body>
 </html>

@@ -121,8 +121,6 @@ class TodoViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'done', 'user')
 
-
-
 router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)
 router.register(r'client', ClientViewSet)
@@ -133,18 +131,8 @@ router.register(r'user', UserViewSet)
 router.register(r'notification', NotificationViewSet)
 router.register(r'todo', TodoViewSet)
 
-
-
-
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
-
-
-
-# Use this method for the custom field
-#def _user(self, obj):
-#    user = self.context['request'].user
-#    return user.username
