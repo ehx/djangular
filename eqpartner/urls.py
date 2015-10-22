@@ -13,7 +13,9 @@ from django.forms import ModelForm
 from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
 
+from django.contrib.auth import views as auth_views
 
+from django.conf.urls import *
 
 class StandardResultsSetPagination(PageNumberPagination):
     page_size = 5
@@ -40,16 +42,17 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client        
+        model = Client     
+        
+        def save(self, obj, **kwargs):
+            user = User.objects.create_user(username='john', email='jlennon@beatles.com', password='glass onion')
+            return topping
 
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
 
 class TaskCommentSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    task = TaskSerializer(read_only=True)
-
     class Meta:
         model = TaskComment
         fields = ('id', 'task', 'user', 'comment', 'creation_date')
@@ -58,7 +61,6 @@ class TaskCommentSerializer2(serializers.ModelSerializer):
     class Meta:
         model = TaskComment
         fields = ('id', 'task', 'user', 'comment', 'creation_date')
-
 
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -78,10 +80,6 @@ class NotificationViewSet(viewsets.ModelViewSet):
     filter_fields = ('notification', 'user', 'read')
 
     def get_queryset(self):
-        """
-        This view should return a list of all the purchases
-        for the currently authenticated user.
-        """
         user = self.request.user
         return Notification.objects.filter(user=user)
 
@@ -103,7 +101,7 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
 
 class TaskCommentViewSet(viewsets.ModelViewSet):
-    queryset = TaskComment.objects.all()
+    queryset = TaskComment.objects.all().order_by('-creation_date')
     serializer_class = TaskCommentSerializer2
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('task', 'user')
@@ -134,5 +132,5 @@ router.register(r'todo', TodoViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

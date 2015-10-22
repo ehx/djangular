@@ -35,7 +35,7 @@ class Client(models.Model):
 class Task(models.Model):
     user = models.ForeignKey(User, verbose_name='Usuario')
     client = models.ForeignKey(Client, verbose_name='Cliente')
-    title = models.CharField(max_length=50, verbose_name='Titulo de la tarea')
+    title = models.CharField(max_length=100, verbose_name='Titulo de la tarea')
     turnover_code = models.CharField(max_length=50, verbose_name='Codigo en Turnover')
     priority = models.IntegerField(verbose_name='Prioridad')
     urgency = models.IntegerField(verbose_name='Urgencia')
@@ -56,7 +56,7 @@ class Task(models.Model):
 class TaskComment(models.Model):
     task = models.ForeignKey(Task, verbose_name="Tarea")
     user = models.ForeignKey(User, verbose_name="Usuario")
-    comment = models.CharField(max_length= 500, verbose_name="Comentario")
+    comment = models.CharField(max_length= 5000, verbose_name="Comentario")
     creation_date = models.DateTimeField(auto_now_add=True)
 
 class TaskUser(models.Model):
