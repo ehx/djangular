@@ -35,7 +35,6 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'ntype', 'notification', 'read')
 
 class TaskSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
     class Meta:
         model = Task
         fields = ('id', 'sar', 'title', 'description', 'creation_date', 'done', 'start_date', 'finish_date', 'client', 'user', 'priority' ,'urgency', 'estimation_hours')
@@ -65,7 +64,7 @@ class TaskCommentSerializer2(serializers.ModelSerializer):
 class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
-        fields = ('id', 'done', 'user', 'description')
+        fields = ('id', 'done', 'user', 'description', 'task')
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -117,7 +116,7 @@ class TodoViewSet(viewsets.ModelViewSet):
     queryset = Todo.objects.all()
     serializer_class = TodoSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('id', 'done', 'user')
+    filter_fields = ('id', 'done', 'user', 'task')
 
 router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)

@@ -30,47 +30,55 @@
           </div>
         </div>
       </div>
+    <button ng-click="deleteTask()" class="btn btn-sm btn-danger pull-right">Borrar tarea</button>
     <ul id="myTabs" class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active">
         <a href="" data-target="#comments-tab" role="tab" data-toggle="tab">Comentarios</a>
       </li>
       <li role="presentation">
-        <a href="" data-target="#checklist-tab" role="tab" data-toggle="tab">Checklist</a>
+        <a href="" data-target="#checklist-tab" role="tab" data-toggle="tab">Tareas</a>
       </li>
     </ul>
     <div id="myTabContent" class="tab-content">
       <div role="tabpanel" class="tab-pane fade in active" id="comments-tab">
-        <div class="form-group">
-          <br>
-          <textarea id="comment" class="form-control" ng-model="cm.comment" rows="3" placeholder="Comentario"></textarea>
-        </div>
-        <div class="form-group">
-          <button class="btn m-b-xs btn-sm btn-info dk btn-addon" ng-click="newComment(cm)"><i class="fa fa-plus"></i>Comentar</button>
-        </div>
-        <div class="row no-margin">
-          <div class="streamline b-l m-b"  infinite-scroll="addMoreItems()">
-            <div ng-if="allComments.length > 0" ng-repeat="comment in allComments" class="sl-item b-success b-l">
-              <div class="m-l">
-                <div class="text-muted">{{comment.creation_date |  moment:'lll'}} - 
-                  {{comment.user.first_name}} {{comment.user.last_name}}
-                </div>
-                <p>{{comment.comment}}</p>
-              </div>
-            </div>
-            <div ng-if="allComments.length === 0"class="sl-item b-danger b-l">
-              <div class="m-l">
-                <p>No se encontraron comentarios para esta tarea.</p>
-              </div>
-            </div>
+        <!-- comments-tab --> 
+        <div class="wrapper-md"> 
+          <div class="form-group" >
+            <textarea id="comment" class="form-control" ng-model="cm.comment" rows="3" placeholder="Comentario"></textarea>
           </div>
-          <!-- paginado -->    
-          <uib-pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" items-per-page="5">
-          </uib-pagination>
-          <!-- paginado -->
+          <div class="form-group">
+            <button class="btn m-b-xs btn-sm btn-info dk btn-addon" ng-click="newComment(cm)"><i class="fa fa-plus"></i>Comentar</button>
+          </div>
+          <div class="row no-margin">
+            <div class="streamline b-l m-b"  infinite-scroll="addMoreItems()">
+              <div ng-if="allComments.length > 0" ng-repeat="comment in allComments" class="sl-item b-success b-l">
+                <div class="m-l">
+                  <div class="text-muted">{{comment.creation_date |  moment:'lll'}} - 
+                    {{comment.user.first_name}} {{comment.user.last_name}}
+                  </div>
+                  <a ng-click="deleteComment(comment.id)" class="text-muted pull-right" tabindex="0">
+                    <i class="fa fa-trash-o "></i>
+                  </a>
+                  <p>{{comment.comment}}</p>
+                </div>
+              </div>
+              <div ng-if="allComments.length === 0"class="sl-item b-danger b-l">
+                <div class="m-l">
+                  <p>No se encontraron comentarios para esta tarea.</p>
+                </div>
+              </div>
+            </div>
+            <!-- paginado -->    
+            <uib-pagination boundary-links="true" total-items="totalItems" ng-model="currentPage" class="pagination-sm" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;" ng-change="pageChanged()" items-per-page="5">
+            </uib-pagination>
+            <!-- /paginado -->
+          </div>
         </div>
+        <!-- /comments-tab -->
       </div>
       <div role="tabpanel" class="tab-pane fade" id="checklist-tab">
-        <div ng-controller="todoController" class="wrapper-md ng-scope" >
+        <!-- /checklist-tab -->
+        <div ng-controller="todoController" class="wrapper-md">
           <div>
             <form ng-submit="addTodo()" id="todo-form" class="ng-pristine ng-valid">
               <input ng-model="description" placeholder="Tarea a realizar" autofocus="" class="form-control input-lg ng-pristine ng-valid ng-touched" tabindex="0" aria-invalid="false">
@@ -110,6 +118,7 @@
             </div>
           </div>
         </div>
+        <!-- /checklist-tab -->
       </div>
     </div>
   </div>

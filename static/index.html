@@ -11,6 +11,7 @@
     <link rel="stylesheet" type='text/css' href="components/angular-xeditable/dist/css/xeditable.css"/>
     <link rel="stylesheet" type='text/css' href="components/jquery-ui/themes/base/jquery-ui.css">
     <link rel="stylesheet" type='text/css' href="components/ui-select/dist/select.min.css">
+    <link rel="stylesheet" type='text/css' href="components//AngularJS-Toaster/toaster.min.css">
     <link rel="stylesheet" type='text/css' href="app.min.css">
   </head>
   <body>
@@ -97,7 +98,22 @@
         </ul>
       </div>
       <!-- / header -->
-  
+      
+      <toaster-container toaster-options="{
+        'closeButton': false,
+        'debug': false,
+        'position-class': 'toast-top-full-width',
+        'onclick': null,
+        'showDuration': '200',
+        'hideDuration': '1000',
+        'timeOut': '5000',
+        'extendedTimeOut': '1000',
+        'showEasing': 'swing',
+        'hideEasing': 'linear',
+        'showMethod': 'fadeIn',
+        'hideMethod': 'fadeOut'
+      }"></toaster-container>
+
       <!-- main-content -->
       <div class="col">
         <div ng-view></div>  
@@ -136,5 +152,8 @@
     <script type="text/javascript" src="components/angular-xeditable/dist/js/xeditable.min.js"></script>
     <script type="text/javascript" src="components/ui-select/dist/select.min.js"></script>
     <script type="text/javascript" src="app.min.js"></script>
+    <script type="text/javascript" src="components/angular-animate/angular-animate.min.js"></script>
+    <script type="text/javascript" src="components/AngularJS-Toaster/toaster.min.js"></script>
+    
   </body>
 </html>

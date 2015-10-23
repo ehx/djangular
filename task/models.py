@@ -66,5 +66,6 @@ class TaskUser(models.Model):
 class Todo(models.Model):
     description = models.CharField(max_length=255, verbose_name='Descripcion')
     user = models.ForeignKey(User, verbose_name="Usuario")
+    task = models.ForeignKey(Task, null=True, verbose_name="Tarea")
     done = models.BooleanField(default=0, verbose_name='Completado')
     creation_date = models.DateTimeField(auto_now_add=True)
