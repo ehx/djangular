@@ -1,8 +1,7 @@
 # djangular
 
-- pip install virtualenv
+- pip install virtualenvwrapper
 - mkvirtualenv venv
-- cd venv
 - workon venv
 - pip install -r requirements.txt
 - ./manage.py migrate
