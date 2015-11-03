@@ -18,7 +18,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'corsheaders',
     'task',
-    'rest_framework'
+    'rest_framework',
+
+    'redactor',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -98,3 +100,6 @@ REST_FRAMEWORK = {
 }
 
 LOGIN_REDIRECT_URL = '/static/index.html'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'attachment')
+MEDIA_URL = '/static/attachment/'

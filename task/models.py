@@ -4,6 +4,15 @@ from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from django.utils import timezone
 
+from redactor.fields import RedactorField
+
+class Module(models.Model):
+    tag = models.CharField(max_length=50, verbose_name="Nombre corto")
+    name = models.CharField(max_length=50, verbose_name="Nombre")
+
+    def __unicode__(self):
+        return self.tag + ' - ' + self.name
+
 class Notification(models.Model):
     user = models.ForeignKey(User, verbose_name='Usuario')
     ntype = models.CharField(max_length=50, verbose_name="Tipo de notificacion")
@@ -45,6 +54,7 @@ class Task(models.Model):
     description = models.CharField(max_length=255, verbose_name='Descripcion')
     sar = models.IntegerField(default=0, verbose_name='Incidente')
     done = models.BooleanField(default=0, verbose_name='Completado')
+    module = models.ForeignKey(Module, verbose_name="Modulo")
     creation_date = models.DateField(null=True, blank=True,auto_now_add=True)
 
     def __unicode__(self):
@@ -57,6 +67,7 @@ class TaskComment(models.Model):
     task = models.ForeignKey(Task, verbose_name="Tarea")
     user = models.ForeignKey(User, verbose_name="Usuario")
     comment = models.CharField(max_length= 5000, verbose_name="Comentario")
+    docfile = models.FileField(upload_to='%Y-%m-%d', null=True)
     creation_date = models.DateTimeField(auto_now_add=True)
 
 class TaskUser(models.Model):

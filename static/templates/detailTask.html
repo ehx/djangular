@@ -16,7 +16,9 @@
       <div class="well m-t bg-info dker lt">
         <div class="row">
           <div class="col-xs-12">
-            <strong>{{task.title}}</strong>
+            <strong>
+              <a href="#" editable-text="task.title" onaftersave="updateTask()">{{task.title}}</a>
+            </strong>
             <p>
               Descripcion : 
               <a href="#" editable-text="task.description" onaftersave="updateTask()">{{task.description}}</a><br>
@@ -26,11 +28,20 @@
               <a href="#" editable-bsdate="task.finish_date" e-datepicker-popup="dd-MMMM-yyyy" onaftersave="updateTask()">{{task.finish_date}}</a><br>
               Horas estimadas : 
               <a href="#" editable-text="task.estimation_hours" onaftersave="updateTask()">{{task.estimation_hours}}</a><br>
+              Prioridad : 
+              <a href="#" editable-text="task.priority" onaftersave="updateTask()">{{task.priority}}</a><br>
+              Urgencia : 
+              <a href="#" editable-text="task.urgency" onaftersave="updateTask()">{{task.urgency}}</a><br>
+              Modulo : 
+              <a href="#" editable-text="task.module" onaftersave="updateTask()">{{task.module}}</a><br>
             </p>
           </div>
         </div>
       </div>
-    <button ng-click="deleteTask()" class="btn btn-sm btn-danger pull-right">Borrar tarea</button>
+    <div class="btn-group pull-right" role="group" aria-label="...">
+      <button ng-click="doneTask()" class="btn btn-sm btn-info">Cerrar tarea</button>
+      <button ng-click="deleteTask()" class="btn btn-sm btn-danger">Borrar tarea</button>
+    </div>
     <ul id="myTabs" class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active">
         <a href="" data-target="#comments-tab" role="tab" data-toggle="tab">Comentarios</a>
@@ -42,13 +53,16 @@
     <div id="myTabContent" class="tab-content">
       <div role="tabpanel" class="tab-pane fade in active" id="comments-tab">
         <!-- comments-tab --> 
-        <div class="wrapper-md"> 
-          <div class="form-group" >
-            <textarea id="comment" class="form-control" ng-model="cm.comment" rows="3" placeholder="Comentario"></textarea>
-          </div>
-          <div class="form-group">
-            <button class="btn m-b-xs btn-sm btn-info dk btn-addon" ng-click="newComment(cm)"><i class="fa fa-plus"></i>Comentar</button>
-          </div>
+        <div class="wrapper-md">
+          <form name="form" ng-submit="newComment(form)">
+            <div class="form-group" >
+              <div text-angular ng-model="cm.comment" name="comment"></div>
+              <input file-model="cm.docfile" name="docfile" type="file">
+            </div>
+            <div class="form-group">
+              <button class="btn m-b-xs btn-sm btn-info dk btn-addon" type="submit"><i class="fa fa-plus"></i>Comentar</button>
+            </div>
+          </form>
           <div class="row no-margin">
             <div class="streamline b-l m-b"  infinite-scroll="addMoreItems()">
               <div ng-if="allComments.length > 0" ng-repeat="comment in allComments" class="sl-item b-success b-l">
@@ -59,7 +73,10 @@
                   <a ng-click="deleteComment(comment.id)" class="text-muted pull-right" tabindex="0">
                     <i class="fa fa-trash-o "></i>
                   </a>
-                  <p>{{comment.comment}}</p>
+                  <p ng-bind-html="comment.comment | rawHtml"></p>
+									<span ng-show="comment.docfile">
+										<span class="label label-info">Adjunto</span>&nbsp; <a href="{{comment.docfile}}">{{comment.docfile | lastWord}}</a>
+									</span>
                 </div>
               </div>
               <div ng-if="allComments.length === 0"class="sl-item b-danger b-l">

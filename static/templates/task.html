@@ -19,32 +19,28 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-xs-6">
+          <div class="col-xs-12">
             <div class="form-group">
               <label for="title">Titulo :</label>
               <input required type='text' class="form-control" ng-model="task.title" id="title">
-            </div>
-          </div>
-          <div class="col-xs-6">
-            <div class="form-group">
-              <label for="clientSelect">Cliente :</label>
-              <select required name="singleSelect" id="clientSelect" ng-model="task.client" class="form-control">
-                <option ng-repeat="option in clients" value="{{option.id}}">{{option.name}} {{option.lastname}}</option>
-              </select>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col-xs-6">
             <div class="form-group">
-              <label for="turnover_code">Codigo de turnover :</label>
-              <input type='text' class="form-control" ng-model="task.turnover_code" id="turnover_code">
+              <label for="moduleSelect">Modulo :</label>
+              <select required name="moduleSelect" id="moduleSelect" ng-model="task.module" class="form-control">
+                <option ng-repeat="optM in modules" value="{{optM.id}}">{{optM.tag}} - {{optM.name}}</option>
+              </select>
             </div>
           </div>
           <div class="col-xs-6">
             <div class="form-group">
-              <label for="priority">Prioridad :</label>
-              <input type='text' class="form-control" ng-model="task.priority" id="priority">
+              <label for="clientSelect">Cliente :</label>
+              <select required name="clientSelect" id="clientSelect" ng-model="task.client" class="form-control">
+                <option ng-repeat="option in clients" value="{{option.id}}">{{option.name}} {{option.lastname}}</option>
+              </select>
             </div>
           </div>
         </div>
@@ -90,6 +86,20 @@
               </div>
             </div> 
           </div>
+          <div class="row">
+            <div class="col-xs-6"> 
+              <div class="form-group">
+                <label for="turnover_code">Codigo de turnover :</label>
+                <input type='text' class="form-control" ng-model="task.turnover_code" id="turnover_code">
+              </div>
+            </div>
+            <div class="col-xs-6"> 
+              <div class="form-group">
+                <label for="priority">Prioridad :</label>
+                <input type='text' class="form-control" ng-model="task.priority" id="priority">
+              </div>
+            </div>
+          </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary" ng-click="newTask()">Guardar</button>
@@ -105,10 +115,16 @@
     <div class="row no-margin">
       <div class="col-md-12 b-light no-border-xs">
         <a href="" class="text-muted pull-right text-lg"></a>
-        <h4 class="font-thin m-t-none m-b-md text-muted">Tareas</h4>
-        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">+</button> 
+        <div class="btn-group pull-right" role="group">
+          <button ng-click="vm.done = null" class="btn btn-info btn-sm">Todas</button> 
+          <button ng-click="vm.done = 'False'" class="btn btn-info btn-sm">Abiertas</button> 
+          <button ng-click="vm.done = 'True'" class="btn btn-info btn-sm">Cerradas</button> 
+          <button data-toggle="modal" data-target="#myModal" class="btn btn-info btn-sm">Agregar tarea</button>
+        </div>
+        <h4 class="font-thin m-t-none m-b-md-30 text-muted">Tareas</h4>
+        
         <div class=" m-b">
-          <div class="m-b" ng-repeat="tdTask in tasks">
+          <div class="m-b" ng-repeat="tdTask in tasks | filter: (vm.done || '') && {done: vm.done}">
             <span class="label text-base bg-info pos-rlt m-r">
               <i class="arrow right arrow-info"></i>
               {{tdTask.finish_date}}
