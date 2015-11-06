@@ -20,7 +20,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 class ModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
-        fields = ('tag', 'name')
+        fields = ('id', 'tag', 'name')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -52,7 +52,6 @@ class ClientSerializer(serializers.ModelSerializer):
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
-
 
 class TaskCommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -100,7 +99,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('id', 'title', 'done')
+    filter_fields = ('id', 'title', 'done', 'user', 'client')
 
 
 class ClientViewSet(viewsets.ModelViewSet):
@@ -152,5 +151,6 @@ router.register(r'module', ModuleViewSet)
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^auth/', include('djoser.urls.authtoken'))
 ]

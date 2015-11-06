@@ -57,7 +57,7 @@
           <form name="form" ng-submit="newComment(form)">
             <div class="form-group" >
               <div text-angular ng-model="cm.comment" name="comment"></div>
-              <input file-model="cm.docfile" name="docfile" type="file">
+              <input file-model="cm.docfile" name="docfile" type="file" class="btn">
             </div>
             <div class="form-group">
               <button class="btn m-b-xs btn-sm btn-info dk btn-addon" type="submit"><i class="fa fa-plus"></i>Comentar</button>
@@ -68,7 +68,7 @@
               <div ng-if="allComments.length > 0" ng-repeat="comment in allComments" class="sl-item b-success b-l">
                 <div class="m-l">
                   <div class="text-muted">{{comment.creation_date |  moment:'lll'}} - 
-                    {{comment.user.first_name}} {{comment.user.last_name}}
+                    {{comment.user.first_name}} {{comment.user.last_name}} {{comment.user}}
                   </div>
                   <a ng-click="deleteComment(comment.id)" class="text-muted pull-right" tabindex="0">
                     <i class="fa fa-trash-o "></i>

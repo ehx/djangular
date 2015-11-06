@@ -5,23 +5,13 @@
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 
-
-* {
-color: green !important;
-background-color: #000000 !important;
-}
-
-
 html {
     font-family: sans-serif;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%
 }
 body {
-    margin: 0;
-background-color:#000000 !important;
-color: green !important;
-
+    margin: 0
 }
 article,
 aside,
@@ -39,8 +29,7 @@ summary {
     display: block
 }
 a {
-    background-color: transparent;
-color: green !important;
+    background-color: transparent
 }
 a:active,
 a:hover {
@@ -1080,7 +1069,7 @@ body {
     font-size: 14px;
     line-height: 1.42857143;
     color: #333;
-    background-color: #000000;
+    background-color: #fff
 }
 input,
 button,
@@ -8846,8 +8835,7 @@ body {
     position: relative;
     width: 100%;
     height: auto;
-    min-height: 92%;
-	color : #000000;
+    min-height: 92%
 }
 .app:before {
     position: absolute;

@@ -19,8 +19,9 @@ INSTALLED_APPS = (
     'corsheaders',
     'task',
     'rest_framework',
-
     'redactor',
+    'djoser',
+    'rest_framework.authtoken'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -93,8 +94,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-      'rest_framework.authentication.BasicAuthentication',
-      'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': ['rest_framework.filters.DjangoFilterBackend']
 }
@@ -103,3 +104,11 @@ LOGIN_REDIRECT_URL = '/static/index.html'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'attachment')
 MEDIA_URL = '/static/attachment/'
+
+DJOSER = {
+    'DOMAIN': 'localhost',
+    'SITE_NAME': 'eqpartner',
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+}

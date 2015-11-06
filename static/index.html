@@ -94,8 +94,21 @@
                 <img src="img/user.jpg">
                 <i class="on md b-white bottom"></i>
               </span>
-              <span class="hidden-sm hidden-md">Usuario</span> <b class="caret"></b>
+              <span class="hidden-sm hidden-md">{{username}}</span> <b class="caret"></b>
             </a>
+            <!-- dropdown -->
+            <div class="dropdown-menu">
+              <div class="panel bg-white">
+                <div class="list-group">
+                  <a href="" ng-click="logout()" class="list-group-item clearfix">
+                    <span class="pull-left m-r">
+                        Cerrar session
+                    </span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!-- / dropdown -->
           </li>
         </ul>
       </div>
