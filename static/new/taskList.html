@@ -29,7 +29,7 @@
             <tbody>
               <tr ng-repeat="tdTask in tasks | filter: (vm.client || '') && {client: vm.client} | filter:{$:searchTask}">
                 <td>
-                  {{ tdTask.module }}
+                  {{ tdTask.module.tag }}
                 </td>
                 <td>
                   <a href="#/task/{{tdTask.id}}">{{tdTask.title}}</a>
@@ -39,11 +39,14 @@
                 <td>
                   {{ tdTask.priority }}
                 </td>
-                <td>
+                <td ng-if="tdTask.finish_date">
                   {{ tdTask.finish_date | moment:'DD/MM/YYYY'}}
                 </td>
+                <td ng-if="!tdTask.finish_date">
+                  No existe fecha comprometida.
+                </td>
                 <td>
-                  <span class="btn btn-success btn-xs">{{ tdTask.status }}</span>
+                  <span class="btn btn-success btn-xs">{{ tdTask.status.name }}</span>
                 </td>
                 <td>
                   <a ng-click="open()" href="#" class="btn btn-info btn-xs">
@@ -71,10 +74,10 @@
           <input ng-model="searchReferent" tabindex="0" aria-invalid="false" type="text" class="form-control" placeholder="Filtrar..." style="margin-left: 10px;border-radius: 5px;">
           <br>
         </div>
-        <div ng-repeat="client in clients | orderBy:'lastname' | filter:{$:searchReferent}" class="animated flipInY col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div ng-repeat="client in clients | orderBy:['organization','lastname','firstname'] | filter:{$:searchReferent}" class="animated flipInY col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <div ng-click="vm.client = client.id" ng-class="{ marcado: vm.client === client.id }" class="tile-stats padd-top">
             <h2>{{client.name}} {{client.lastname}}</h2>
-            <p>{{client.organization}}</p>
+            <p>{{client.organization.name}}</p>
           </div>
           </div>
         </div>

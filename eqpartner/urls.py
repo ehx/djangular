@@ -16,6 +16,15 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 100
 
+class OrganizationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organization
+
+
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Status
+
 
 class ModuleSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,12 +46,29 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'ntype', 'notification', 'read')
 
 
-class ClientSerializer(serializers.ModelSerializer):
+class ClientSerializerWriter(serializers.ModelSerializer):
     class Meta:
         model = Client
 
 
+class ClientSerializer(serializers.ModelSerializer):
+    organization = OrganizationSerializer()
+    class Meta:
+        model = Client
+        fields = ('id', 'name', 'lastname', 'address', 'telephone', 'mail', 'organization')
+
+
+class TaskSerializerWriter(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = (
+            'id', 'sar', 'title', 'description', 'creation_date', 'done', 'start_date', 'finish_date', 'client', 'user',
+            'priority', 'urgency', 'estimation_hours', 'module', 'status')
+
 class TaskSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    module = ModuleSerializer()
+    status = StatusSerializer()
     class Meta:
         model = Task
         fields = (
@@ -50,9 +76,7 @@ class TaskSerializer(serializers.ModelSerializer):
             'priority', 'urgency', 'estimation_hours', 'module', 'status')
 
 
-class OrganizationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Organization
+
 
 class TaskCommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -72,9 +96,6 @@ class TodoSerializer(serializers.ModelSerializer):
         fields = ('id', 'done', 'user', 'description', 'task')
 
 
-class StatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Status
 
 
 class ModuleViewSet(viewsets.ModelViewSet):
@@ -103,15 +124,29 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all().order_by('priority')
-    serializer_class = TaskSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'title', 'done', 'user', 'client')
 
+    def get_serializer_class(self):
+        # get one task
+        if self.action == 'retrieve':
+            return TaskSerializer
+        if self.action == 'list':
+            return TaskSerializer
+        return TaskSerializerWriter
+
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
-    serializer_class = ClientSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'name', 'lastname', 'organization')
+
+    def get_serializer_class(self):
+        # get one task
+        if self.action == 'retrieve':
+            return ClientSerializer
+        if self.action == 'list':
+            return ClientSerializer
+        return ClientSerializerWriter
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
@@ -146,7 +181,6 @@ class StatusViewSet(viewsets.ModelViewSet):
     serializer_class = StatusSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'name')
-
 
 router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)
