@@ -37,17 +37,18 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'ntype', 'notification', 'read')
 
 
+class ClientSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
+
+
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = (
             'id', 'sar', 'title', 'description', 'creation_date', 'done', 'start_date', 'finish_date', 'client', 'user',
-            'priority', 'urgency', 'estimation_hours', 'module')
+            'priority', 'urgency', 'estimation_hours', 'module', 'status')
 
-
-class ClientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Client
 
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -69,6 +70,11 @@ class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
         fields = ('id', 'done', 'user', 'description', 'task')
+
+
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Status
 
 
 class ModuleViewSet(viewsets.ModelViewSet):
@@ -96,11 +102,10 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all()
+    queryset = Task.objects.all().order_by('priority')
     serializer_class = TaskSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'title', 'done', 'user', 'client')
-
 
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
@@ -119,7 +124,7 @@ class TaskCommentViewSet(viewsets.ModelViewSet):
     queryset = TaskComment.objects.all().order_by('-creation_date')
     serializer_class = TaskCommentSerializer2
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('task', 'user')
+    filter_fields = ('id', 'task', 'user', 'docfile')
     pagination_class = StandardResultsSetPagination
 
 
@@ -127,7 +132,7 @@ class TaskCommentViewSet2(viewsets.ModelViewSet):
     queryset = TaskComment.objects.all()
     serializer_class = TaskCommentSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('task', 'user')
+    filter_fields = ('id', 'task', 'user', 'docfile')
 
 
 class TodoViewSet(viewsets.ModelViewSet):
@@ -135,6 +140,12 @@ class TodoViewSet(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'done', 'user', 'task')
+
+class StatusViewSet(viewsets.ModelViewSet):
+    queryset = Status.objects.all()
+    serializer_class = StatusSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('id', 'name')
 
 
 router = routers.DefaultRouter()
@@ -147,6 +158,7 @@ router.register(r'user', UserViewSet)
 router.register(r'notification', NotificationViewSet)
 router.register(r'todo', TodoViewSet)
 router.register(r'module', ModuleViewSet)
+router.register(r'status', StatusViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

@@ -21,7 +21,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'redactor',
     'djoser',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -6,6 +6,12 @@ from django.utils import timezone
 
 from redactor.fields import RedactorField
 
+class Status(models.Model):
+    name = models.CharField(max_length=50, verbose_name="Nombre")
+
+    def __unicode__(self):
+        return self.name
+
 class Module(models.Model):
     tag = models.CharField(max_length=50, verbose_name="Nombre corto")
     name = models.CharField(max_length=50, verbose_name="Nombre")
@@ -46,7 +52,7 @@ class Task(models.Model):
     client = models.ForeignKey(Client, verbose_name='Cliente')
     title = models.CharField(max_length=100, verbose_name='Titulo de la tarea')
     turnover_code = models.CharField(max_length=50, verbose_name='Codigo en Turnover')
-    priority = models.IntegerField(verbose_name='Prioridad')
+    priority = models.IntegerField(verbose_name='Orden')
     urgency = models.IntegerField(verbose_name='Urgencia')
     start_date = models.DateField(null=True, blank=True, verbose_name='Fecha de Inicio')
     finish_date = models.DateField(null=True, blank=True, verbose_name='Fecha Comprometida')
@@ -55,6 +61,7 @@ class Task(models.Model):
     sar = models.IntegerField(default=0, verbose_name='Incidente')
     done = models.BooleanField(default=0, verbose_name='Completado')
     module = models.ForeignKey(Module, verbose_name="Modulo")
+    status = models.ForeignKey(Status, verbose_name="Estado")
     creation_date = models.DateField(null=True, blank=True,auto_now_add=True)
 
     def __unicode__(self):
