@@ -114,7 +114,7 @@
             </div>
             <div class="col-xs-6">
               <div class="form-group">
-                <label for="clientSelect">Cliente :</label>
+                <label for="clientSelect">Referente :</label>
                 <select required name="clientSelect" id="clientSelect" ng-model="task.client" class="form-control">
                   <option ng-repeat="option in clients" value="{{option.id}}">{{option.name}} {{option.lastname}}</option>
                 </select>
@@ -172,7 +172,7 @@
               </div>
               <div class="col-xs-6"> 
                 <div class="form-group">
-                  <label for="priority">Prioridad :</label>
+                  <label for="priority">Orden :</label>
                   <input type='text' class="form-control" ng-model="task.priority" id="priority">
                 </div>
               </div>
