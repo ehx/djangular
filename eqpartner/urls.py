@@ -69,6 +69,7 @@ class TaskSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     module = ModuleSerializer()
     status = StatusSerializer()
+    client = ClientSerializer()
     class Meta:
         model = Task
         fields = (
