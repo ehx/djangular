@@ -30,7 +30,7 @@
                       <p class="month">{{comment.creation_date |  moment:'MMM'}}</p>
                     </div>
                     <div class="message_wrapper">
-                      <h4 class="heading">{{comment.user.first_name}} {{comment.user.last_name}} {{comment.user}}</h4>
+                      <h4 class="heading">{{comment.user.first_name}} {{comment.user.last_name}}</h4>
                       <blockquote ng-bind-html="comment.comment | rawHtml" class="message"></blockquote>
                       <br />
                       <p class="url" ng-show="comment.docfile">

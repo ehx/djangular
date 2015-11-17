@@ -6388,3 +6388,31 @@ ul.notifications {
 .icon-20 {
     font-size: 20px;
 }
+
+.btn-danger { 
+    border-color: #BF3636; 
+    background-color: #d84f4f;
+}
+
+.btn-danger:hover{
+    transition: background-color 0.8s ease;
+    border-color: #BF3636; 
+    background-color: #b02727;
+}
+
+.btn-info { 
+    border-color: #A29797;
+    background-color: #969090;
+}
+
+.btn-info:hover{
+    transition: background-color 0.8s ease;
+    border-color: #A29797;
+    background-color: #584E4E;
+}
+
+.btn-info:visited{
+    transition: background-color 0.8s ease;
+    border-color: #A29797;
+    background-color: #584E4E;
+}

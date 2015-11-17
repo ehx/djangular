@@ -86,6 +86,7 @@ class TaskCommentSerializer(serializers.ModelSerializer):
 
 
 class TaskCommentSerializer2(serializers.ModelSerializer):
+    user = UserSerializer();
     class Meta:
         model = TaskComment
         fields = ('id', 'task', 'user', 'comment', 'creation_date', 'docfile')
