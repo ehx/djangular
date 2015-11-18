@@ -19,6 +19,12 @@ class StandardResultsSetPagination(PageNumberPagination):
 class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organization
+        
+
+class UrgencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Urgency
+        fields = ('id', 'name')
 
 
 class StatusSerializer(serializers.ModelSerializer):
@@ -70,6 +76,7 @@ class TaskSerializer(serializers.ModelSerializer):
     module = ModuleSerializer()
     status = StatusSerializer()
     client = ClientSerializer()
+    urgency = UrgencySerializer()
     class Meta:
         model = Task
         fields = (
@@ -96,8 +103,6 @@ class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
         fields = ('id', 'done', 'user', 'description', 'task')
-
-
 
 
 class ModuleViewSet(viewsets.ModelViewSet):
@@ -183,6 +188,13 @@ class StatusViewSet(viewsets.ModelViewSet):
     serializer_class = StatusSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'name')
+    
+class UrgencyViewSet(viewsets.ModelViewSet):
+    queryset = Urgency.objects.all()
+    serializer_class = UrgencySerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('id', 'name')
+
 
 router = routers.DefaultRouter()
 router.register(r'task', TaskViewSet)
@@ -195,6 +207,7 @@ router.register(r'notification', NotificationViewSet)
 router.register(r'todo', TodoViewSet)
 router.register(r'module', ModuleViewSet)
 router.register(r'status', StatusViewSet)
+router.register(r'urgency', UrgencyViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
