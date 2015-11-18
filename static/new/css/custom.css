@@ -6440,3 +6440,12 @@ ul.notifications {
     color: #FFFFFF;
     background-color: #584E4E;
 }
+
+#tasktitle a {
+    position:relative;
+    width: 220px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    display:inline-block;
+}
