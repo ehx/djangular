@@ -85,16 +85,17 @@
                     <ul class="to_do">
                       <li ng-show="todoTasks !== []" ng-repeat="todo in todoTasks | filter:statusFilter track by $index">
                         <p>
-                          <input ng-model="todo.done" ng-change="doneTodo(todo.id)" type="checkbox"> 
+                          <input icheck ng-model="todo.done" ng-change="doneTodo(todo.id)" type="checkbox" class="flat"> 
                           {{todo.description}}
                         </p>
+
                       </li>
                     </ul> 
-                  </div>
-                  <div ng-if="todoTasks.length === 0" class="streamline b-l m-b">
-                    <div class="sl-item b-danger b-l">
-                      <div class="m-l">
-                        <p>No se encontraron tareas.</p>
+                    <div ng-if="todoTasks.length === 0" class="streamline b-l m-b">
+                      <div class="sl-item b-danger b-l">
+                        <div class="m-l">
+                          <p>No se encontraron tareas.</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -121,9 +122,14 @@
                     <p>{{task.user.first_name}} {{task.user.last_name}}</p>
                   </div>
                   <br />
-                  <div class="text-center mtop20">
-                    <button ng-click="doneTask()" class="btn btn-sm btn-info">Cerrar tarea</a>
-                    <button ng-click="deleteTask()" class="btn btn-sm btn-danger">Borrar tarea</a>
+                  <div class="row">
+                    <div class="col-lg-4 col-md-12 col-lg-12">
+                      <div class="text-center mtop20">
+                        <button ng-if="!task.done" ng-click="doneTask()" class="btn btn-sm btn-info">Cerrar tarea</a>
+                        <button ng-if="task.done" ng-click="openTask()" class="btn btn-sm btn-info">Abrir tarea</a>
+                        <button ng-click="deleteTask()" class="btn btn-sm btn-danger">Borrar tarea</a>
+                      </div>
+                    </div>
                   </div>
                   <div class="ln_solid"></div>
                     <h5><u>Adjuntos</u></h5>
