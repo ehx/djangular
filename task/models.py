@@ -1,9 +1,9 @@
+import os
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from django.utils import timezone
-
 from redactor.fields import RedactorField
 
 class Urgency(models.Model):
@@ -85,6 +85,13 @@ class TaskComment(models.Model):
     
     def __str__(self):   
         return self.user.first_name + ' ' + self.comment
+
+    def delete(self,*args,**kwargs):
+        if hasattr(self.docfile, 'path'):
+            if os.path.isfile(self.docfile.path):
+                os.remove(self.docfile.path)
+
+        super(TaskComment, self).delete(*args,**kwargs)
 
 class TaskUser(models.Model):
     task = models.ForeignKey(Task)

@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 from task.models import *
 from rest_framework.pagination import PageNumberPagination
 from django.conf.urls import *
+from django.db.models import Q
+
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -71,6 +73,7 @@ class TaskSerializerWriter(serializers.ModelSerializer):
             'id', 'sar', 'title', 'description', 'creation_date', 'done', 'start_date', 'finish_date', 'client', 'user',
             'priority', 'urgency', 'estimation_hours', 'module', 'status')
 
+
 class TaskSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     module = ModuleSerializer()
@@ -84,15 +87,13 @@ class TaskSerializer(serializers.ModelSerializer):
             'priority', 'urgency', 'estimation_hours', 'module', 'status')
 
 
-
-
-class TaskCommentSerializer(serializers.ModelSerializer):
+class TaskCommentSerializerWriter(serializers.ModelSerializer):
     class Meta:
         model = TaskComment
         fields = ('id', 'task', 'user', 'comment', 'creation_date', 'docfile')
 
 
-class TaskCommentSerializer2(serializers.ModelSerializer):
+class TaskCommentSerializer(serializers.ModelSerializer):
     user = UserSerializer();
     class Meta:
         model = TaskComment
@@ -142,6 +143,7 @@ class TaskViewSet(viewsets.ModelViewSet):
             return TaskSerializer
         return TaskSerializerWriter
 
+
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
@@ -164,17 +166,23 @@ class OrganizationViewSet(viewsets.ModelViewSet):
 
 class TaskCommentViewSet(viewsets.ModelViewSet):
     queryset = TaskComment.objects.all().order_by('-creation_date')
-    serializer_class = TaskCommentSerializer2
+    serializer_class = TaskCommentSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'task', 'user', 'docfile')
     pagination_class = StandardResultsSetPagination
 
+    def get_queryset(self):
+        queryset = super(TaskCommentViewSet, self).get_queryset() 
+        if self.request.query_params.get('attachment', None):
+            return queryset.filter(~Q(docfile=''))
+        return queryset
 
-class TaskCommentViewSet2(viewsets.ModelViewSet):
-    queryset = TaskComment.objects.all()
-    serializer_class = TaskCommentSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('id', 'task', 'user', 'docfile')
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return TaskCommentSerializer
+        if self.action == 'list':
+            return TaskCommentSerializer
+        return TaskCommentSerializerWriter
 
 
 class TodoViewSet(viewsets.ModelViewSet):
@@ -183,12 +191,20 @@ class TodoViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'done', 'user', 'task')
 
+    def get_queryset(self):
+        queryset = super(TodoViewSet, self).get_queryset() 
+        if self.request.query_params.get('task_is_null', None):
+            return queryset.filter(task_id__isnull=True)
+        return queryset        
+
+
 class StatusViewSet(viewsets.ModelViewSet):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('id', 'name')
     
+
 class UrgencyViewSet(viewsets.ModelViewSet):
     queryset = Urgency.objects.all()
     serializer_class = UrgencySerializer
@@ -201,7 +217,6 @@ router.register(r'task', TaskViewSet)
 router.register(r'client', ClientViewSet)
 router.register(r'organization', OrganizationViewSet)
 router.register(r'taskComment', TaskCommentViewSet)
-router.register(r'taskComment2', TaskCommentViewSet2)
 router.register(r'user', UserViewSet)
 router.register(r'notification', NotificationViewSet)
 router.register(r'todo', TodoViewSet)

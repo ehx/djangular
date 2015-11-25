@@ -1,183 +1,205 @@
 <!DOCTYPE html>
-<html lang="es" data-ng-app="app" class="">
-  <head>
-    <title>Titulo</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel='stylesheet' type='text/css' href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,300'>
-    <link rel="stylesheet" type='text/css' href="components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type='text/css' href="components/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" type='text/css' href="components/angular-xeditable/dist/css/xeditable.css"/>
-    <link rel="stylesheet" type='text/css' href="components/jquery-ui/themes/base/jquery-ui.css">
-    <link rel="stylesheet" type='text/css' href="components/ui-select/dist/select.min.css">
-    <link rel="stylesheet" type='text/css' href="components/AngularJS-Toaster/toaster.min.css">
-    <link rel="stylesheet" type='text/css' href="components/textAngular/dist/textAngular.css">
-    <link rel="stylesheet" type='text/css' href="app.min.css">
-    
-  </head>
-  <body>
-    <!-- main -->
-    <div class="app" ng-controller="mainController">
-      <!-- header -->   
-      <div class="collapse pos-rlt navbar-collapse box-shadow bg-info dker">
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="#/">
-              <span>Lista de tareas</span> 
-            </a>
-          </li>
-          <li>
-            <a href="#/messages">
-              <span>Centro de mensajes</span> 
-            </a>
-          </li>
-          <li>
-            <a href="#/config">
-              <span>Configuracion</span> 
-            </a>
-          </li>
-          <li>
-            <a href="#/history">
-              <span>Historia</span> 
-            </a>
-          </li>
-          <li>
-            <a href="#/todo">
-              <span>Mis tareas</span> 
-            </a>
-          </li>
-          <li>
-            <a href="#/client">
-              <span>Clientes</span> 
-            </a>
-          </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          <li class="dropdown" dropdown="">
-            <a href="" class="dropdown-toggle" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-bell"></i>
-              <span class="visible-xs-inline">Notificaciones</span>
-              <span ng-if="countNotification > 0" class="badge badge-sm up bg-danger pull-right-xs">{{countNotification}}</span>
-            </a>
-            <!-- dropdown -->
-            <div class="dropdown-menu w-xl">
-              <div class="panel bg-white">
-                <div class="panel-heading b-light bg-light">
-                  <strong ng-if="countNotification > 0">Notificaciones</strong>
-                  <strong ng-if="countNotification === 0">Sin Notificaciones</strong>
-                </div>
-                <div class="list-group" ng-if="countNotification > 0">
-                  <a href="" class="list-group-item clearfix" ng-repeat="nt in notifications">
-                    <span class="pull-left m-r">
-                      <span class="fa-stack fa-lg">
-                        <i class="fa fa-square fa-stack-2x"></i>
-                        <i class="fa fa-comments-o fa-stack-1x fa-inverse"></i>
-                      </span>
-                    </span>
-                    <span class="clear block m-b-none">
-                      {{nt.user.first_name}} {{nt.user.last_name}}<br>
-                      <small class="text-muted">{{nt.creation_date | moment:'lll'}}</small>
-                    </span>
-                  </a>
-                </div>
-                <div class="panel-footer text-sm">
-                  <a ng-if="countNotification > 0" href="#notes" ng-click="markAsRead(notifications)" data-toggle="class:show animated fadeInRight">Marcar todas como leidas</a>
-                  </div>
-              </div>
-            </div>
-            <!-- / dropdown -->
-          </li>
-          <li class="dropdown" dropdown="">
-            <a href="" class="dropdown-toggle clear" dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
-              <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
-                <img src="img/user.jpg">
-                <i class="on md b-white bottom"></i>
-              </span>
-              <span class="hidden-sm hidden-md">{{username}}</span> <b class="caret"></b>
-            </a>
-            <!-- dropdown -->
-            <div class="dropdown-menu">
-              <div class="panel bg-white">
-                <div class="list-group">
-                  <a href="" ng-click="logout()" class="list-group-item clearfix">
-                    <span class="pull-left m-r">
-                        Cerrar session
-                    </span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <!-- / dropdown -->
-          </li>
-        </ul>
-      </div>
-      <!-- / header -->
-      
-      <toaster-container toaster-options="{
-        'closeButton': false,
-        'debug': false,
-        'position-class': 'toast-top-full-width',
-        'onclick': null,
-        'showDuration': '200',
-        'hideDuration': '1000',
-        'timeOut': '5000',
-        'extendedTimeOut': '1000',
-        'showEasing': 'swing',
-        'hideEasing': 'linear',
-        'showMethod': 'fadeIn',
-        'hideMethod': 'fadeOut'
-      }"></toaster-container>
+<html lang="es" data-ng-app="app">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-      <!-- main-content -->
-      <div class="col">
-        <div ng-view></div>  
-      </div>
-      <!-- / main-content -->
-    <!-- / main -->
-    </div>
-    <!-- /content -->
+  <title>EQuality | Clip </title>
+
+  <link href="components/textAngular/dist/textAngular.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
   
-    <!-- footer -->
-    <footer class="footer bg-light b-t wrapper">
-        <div class="container">
-          <span class="pull-right">
-            <a href="" ui-scroll-to="app" class="m-l-sm text-muted">
-              <i class="fa fa-long-arrow-up"></i>
-            </a>
-          </span>
-          © 2015 Copyright.
+  <link href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" rel="stylesheet">
+
+  <link href="fonts/css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/animate.min.css" rel="stylesheet">
+  <!-- Custom styling plus plugins -->
+  <link href="css/icheck/flat/green.css" rel="stylesheet">
+  <link href="css/custom.css" rel="stylesheet">
+  <!-- switchery -->
+  <link rel="stylesheet" href="css/switchery/switchery.min.css" />
+
+  <script src="js/jquery.min.js"></script>
+  <!--[if lt IE 9]>
+      <script src="../assets/js/ie8-responsive-file-warning.js"></script>
+      <![endif]-->
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body ng-controller="mainController" class="nav-md">
+  <div class="container body">
+    <div class="main_container">
+      <div class="col-md-3 left_col">
+        <div class="left_col scroll-view">
+          <div class="navbar nav_title" style="border: 0;">
+              <a href="#/" class="site_title"><i class="fa fa-paperclip"></i> <span>Clip</span></a>
+          </div>
+          <div class="clearfix"></div>
+          <br />
+          <!-- sidebar menu -->
+          <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+            <div class="menu_section">
+              <h3>General</h3>
+              <ul class="nav side-menu">
+                <li>
+                  <a>
+                    <i class="fa fa-edit"></i> Lista de tareas <span class="fa fa-chevron-down"></span>
+                  </a>
+                  <ul class="nav child_menu" style="display: none">
+                    <li>
+                      <a href="#/">Tareas</a>
+                    </li>
+                    <li>
+                      <a href="#/taskhistory">Historial</a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#/todo">
+                    <i class="fa fa-tasks"></i> Mis tareas
+                  </a>
+                </li>
+                <li>
+                  <a href="#/messages">
+                    <i class="fa fa-envelope-o"></i> Centro de mensajes</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- /sidebar menu -->
         </div>
-    </footer>
+      </div>
+      <!-- top navigation -->
+      <div class="top_nav">
+        <div class="nav_menu">
+          <nav class="" role="navigation">
+            <div class="nav toggle">
+              <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="">
+                <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                  <img src="images/img.jpg" alt="">{{username}}
+                  <span class=" fa fa-angle-down"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
+                  <li>
+                    <a href="#/configuration">
+                      <span>Configuracion</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="" ng-click="logout()"><i class="fa fa-sign-out pull-right"></i> Cerrar session</a>
+                  </li>
+                </ul>
+              </li>
+              <li role="presentation" class="dropdown">
+                <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
+                  <i class="fa fa-envelope-o"></i>
+                  <span class="badge bg-green">{{countNotification}}</span>
+                </a>
+                <ul id="menu1" class="dropdown-menu list-unstyled msg_list animated fadeInDown" role="menu">
+                  <li ng-repeat="nt in notifications">
+                    <a>
+                      <span class="image">
+                        <img src="images/img.jpg" alt="Profile Image" />
+                      </span>
+                      <span>
+                        <span>{{nt.user}}</span>
+                        <span class="time">{{nt.creation_date | moment:'DD/MM/YYYY'}}</span>
+                      </span>
+                      <span class="message">
+                        {{nt.ntype}}
+                      </span>
+                    </a>
+                  </li>
+                  <li>
+                    <div class="text-center">
+                      <a>
+                        <strong>Ver todas las alertas</strong>
+                        <i class="fa fa-angle-right"></i>
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- /top navigation -->
+      <!-- page content -->
+      <div class="right_col" role="main">
+          <div class="">
+            <div ng-view></div>  
+          </div>
+          <!-- footer content -->
+          <footer>
+            <div class="">
+              <p class="pull-right">
+                <img src="images/eqlogo.png" id="logo-eq">
+                EQuality.
+              </p>
+            </div>
+            <div class="clearfix"></div>
+          </footer>
+          <!-- /footer content -->
+      </div>
+      <!-- /page content -->
+    </div>
+  </div>
 
-    <!-- javascripts -->  
-    <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="components/jquery-ui/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="components/angular/angular.min.js"></script>
-    <script type="text/javascript" src="components/angular-animate/angular-animate.min.js"></script>
-    <script type="text/javascript" src="components/angular-resource/angular-resource.min.js"></script>
-    <script type="text/javascript" src="components/angular-route/angular-route.min.js"></script>
-    <script type="text/javascript" src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script type="text/javascript" src="components/jquery-ui/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="components/angular-cookies/angular-cookies.min.js"></script>
-    <script type="text/javascript" src="components/moment/min/moment-with-locales.min.js"></script>
-    <script type="text/javascript" src="components/moment/min/moment.min.js"></script>
-    <script type="text/javascript" src="components/angular-sanitize/angular-sanitize.min.js"></script>
-    <script type="text/javascript" src="components/angular-xeditable/dist/js/xeditable.min.js"></script>
-    <script type="text/javascript" src="components/ui-select/dist/select.min.js"></script>
-    
-    <script type="text/javascript" src="components/angular-animate/angular-animate.min.js"></script>
-    <script type="text/javascript" src="components/AngularJS-Toaster/toaster.min.js"></script>
+  <div id="custom_notifications" class="custom-notifications dsp_none">
+    <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group">
+    </ul>
+    <div class="clearfix"></div>
+    <div id="notif-group" class="tabbed_notifications"></div>
+  </div>
 
-    <script type="text/javascript" src='components/textAngular/dist/textAngular-rangy.min.js'></script>
-    <script type="text/javascript" src='components/textAngular/dist/textAngular-sanitize.min.js'></script>
-    <script type="text/javascript" src='components/textAngular/dist/textAngular.min.js'></script>
-    <script type="text/javascript" src='components/textAngular/dist/textAngularSetup.js'></script>
+  <!-- javascripts -->  
+  <script type="text/javascript" src="components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="components/jquery-ui/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="components/angular-animate/angular-animate.min.js"></script>
+  <script type="text/javascript" src="components/angular-resource/angular-resource.min.js"></script>
+  <script type="text/javascript" src="components/angular-route/angular-route.min.js"></script>
+  <script type="text/javascript" src="components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script type="text/javascript" src="components/jquery-ui/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="components/angular-cookies/angular-cookies.min.js"></script>
+  <script type="text/javascript" src="components/moment/min/moment-with-locales.min.js"></script>
+  <script type="text/javascript" src="components/moment/min/moment.min.js"></script>
+  <script type="text/javascript" src="components/angular-sanitize/angular-sanitize.min.js"></script>
+  <script type="text/javascript" src="components/angular-xeditable/dist/js/xeditable.min.js"></script>
+  <script type="text/javascript" src="components/ui-select/dist/select.min.js"></script>
+  <script type="text/javascript" src="components/angular-animate/angular-animate.min.js"></script>
+  <script type="text/javascript" src="components/AngularJS-Toaster/toaster.min.js"></script>
+  <script type="text/javascript" src='components/textAngular/dist/textAngular-rangy.min.js'></script>
+  <script type="text/javascript" src='components/textAngular/dist/textAngular-sanitize.min.js'></script>
+  <script type="text/javascript" src='components/textAngular/dist/textAngular.min.js'></script>
+  <script type="text/javascript" src='components/textAngular/dist/textAngularSetup.js'></script>
+  <script type="text/javascript" src="components/ng-file-upload/ng-file-upload-shim.min.js"></script>
+  <script type="text/javascript" src="components/ng-file-upload/ng-file-upload.min.js"></script>
+  <script src="js/switchery/ng-switchery.js"></script>
 
-    <script type="text/javascript" src="components/ng-file-upload/ng-file-upload-shim.min.js"></script>
-    <script type="text/javascript" src="components/ng-file-upload/ng-file-upload.min.js"></script>
-
-    <script type="text/javascript" src="app.min.js"></script>
-  </body>
+  <script type="text/javascript" src="app.min.js"></script>
+  <script src="js/custom.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <!-- chart js -->
+  <script src="js/chartjs/chart.min.js"></script>
+  <!-- bootstrap progress js -->
+  <script src="js/progressbar/bootstrap-progressbar.min.js"></script>
+  <script src="js/nicescroll/jquery.nicescroll.min.js"></script>
+  <!-- icheck -->
+  <script src="js/icheck/icheck.min.js"></script>
+  <!-- switchery -->
+  <script src="js/switchery/switchery.min.js"></script>
+</body>
 </html>

@@ -6449,3 +6449,18 @@ ul.notifications {
     white-space:nowrap;
     display:inline-block;
 }
+
+#logo-eq {
+    width: 15%;
+    height: 15%;
+    margin-top: -6px;
+}
+
+.panel-body{
+    overflow:hidden;
+    word-wrap: break-word;
+}
+
+.panel-body > h3{
+    margin-top: -10px;
+}
