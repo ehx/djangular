@@ -48,14 +48,13 @@ class Client(models.Model):
     address = models.CharField(max_length=50, verbose_name='Direccion')
     telephone = models.IntegerField(verbose_name='Telefono')
     mail = models.EmailField(max_length=254, verbose_name='Mail')
-    organization = models.ForeignKey(Organization, verbose_name="Organizacion")
-
+    
     def __str__(self):
         return self.name + ' ' + self.lastname
 
 class Task(models.Model):
     user = models.ForeignKey(User, null=True, verbose_name='Usuario')
-    client = models.ForeignKey(Client, null=True, verbose_name='Cliente')
+    client = models.ForeignKey(User, null=True, verbose_name='Cliente', related_name="userR")
     title = models.CharField(max_length=100, verbose_name='Titulo de la tarea')
     turnover_code = models.CharField(default=0, max_length=50, verbose_name='Codigo en Turnover')
     priority = models.IntegerField(null=True, verbose_name='Orden')
@@ -72,9 +71,6 @@ class Task(models.Model):
 
     def __str__(self):   
         return self.title
-
-    def get_absolute_url(self):
-        return reverse('task:task_edit', kwargs={'pk': self.pk})
 
 class TaskComment(models.Model):
     task = models.ForeignKey(Task, verbose_name="Tarea")
@@ -93,9 +89,12 @@ class TaskComment(models.Model):
 
         super(TaskComment, self).delete(*args,**kwargs)
 
-class TaskUser(models.Model):
-    task = models.ForeignKey(Task)
+class UserClient(models.Model):
     user = models.ForeignKey(User)
+    userR = models.ForeignKey(User, related_name="userR")
+
+    def __str__(self):   
+        return self.user.last_name + ' / ' + self.userR.last_name
 
 class Todo(models.Model):
     description = models.CharField(max_length=255, verbose_name='Descripcion')
@@ -106,3 +105,21 @@ class Todo(models.Model):
     
     def __str__(self):   
         return self.user.first_name  + ' / ' + self.description 
+
+class Message(models.Model):
+    owner = models.OneToOneField(User, verbose_name="Usuario que envia", related_name="user_owner", unique=True)
+    receptor = models.OneToOneField(User, verbose_name="Receptor", related_name="user_receptor", unique=True)
+    message = models.CharField(max_length=255, verbose_name='Mensaje')
+    read = models.BooleanField(default=0, verbose_name='Leido')
+    creation_date = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):   
+        return self.user.first_name  + ' / ' + self.client.name + ' @ ' + self.message
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, unique=True, verbose_name="Usuario")
+    organization = models.ForeignKey(Organization, verbose_name="Organizacion")
+    online = models.BooleanField(default=1, verbose_name='Online')
+
+    def __str__(self):   
+        return self.user.first_name  + ' ' + self.user.last_name
